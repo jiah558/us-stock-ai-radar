@@ -51,8 +51,8 @@ const svg = (k, cls = '') => FILLED[k]
   : `<svg class="ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[k]}</svg>`;
 const sparkSearch = `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M14.6 15.6L20 21" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M18 2.2c.3 2 1.4 3.1 3.4 3.4-2 .3-3.1 1.4-3.4 3.4-.3-2-1.4-3.1-3.4-3.4 2-.3 3.1-1.4 3.4-3.4z" fill="currentColor"/></svg>`;
 const APP = '绿仔的投资小屋';
-/* three wordmark drafts, switchable via ?logo=a|b|c (remembered in localStorage) */
-const LOGO_V = (() => { const m = location.search.match(/[?&]logo=([abc])/); try { if (m) localStorage.setItem('logo', m[1]); return m ? m[1] : (localStorage.getItem('logo') || 'a'); } catch (e) { return m ? m[1] : 'a'; } })();
+/* wordmark: B (rounded + cottage) is final. ?logo=a|c still previews the other drafts for this page load only (not persisted). */
+const LOGO_V = (() => { try { localStorage.removeItem('logo'); } catch (e) {} const m = location.search.match(/[?&]logo=([abc])/); return m ? m[1] : 'b'; })();
 document.documentElement.dataset.logo = LOGO_V;
 const MARKS = {
   // A: brush seal — a soft brick-red square chop with the character 绿
