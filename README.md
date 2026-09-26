@@ -1,4 +1,6 @@
-# 美股 AI 雷达 · US Stock AI Radar
+# 绿仔的投资小屋 · Lüzai's Investment Hut
+
+_(formerly “美股 AI 雷达 · US Stock AI Radar”)_
 
 A mobile-first PWA that explains, in Simplified Chinese, **why US stocks moved today**. An AI agent pulls together US media, filings, analyst actions and retail-forum sentiment every trading day. It then runs a **four-school AI debate** (价值派 / 成长派 / 技术派 / 宏观派) that ends in a consensus.
 
@@ -11,7 +13,7 @@ A mobile-first PWA that explains, in Simplified Chinese, **why US stocks moved t
 Desktop (1440): ![](screenshots/d1-home.png)
 
 ## Features
-- **Design**: Google-Finance-style information architecture (desktop 3 columns: list · market overview · "AI 研究" panel; index cards with sparklines; accordion market summary; 最新动态 feed; quote page with range tabs, crosshair chart and key stats) rendered in iOS-style "Liquid Glass" materials: frosted sticky nav bar, floating capsule tab bar on mobile, large titles that collapse into the nav bar, #f5f5f7 background with large-radius white cards, spring press/page motion, and automatic dark mode (true black, glowing red/green). Signature "activity rings" card (涨势 / 跌势 / 散户情绪), iMessage-style debate bubbles, and a shareable consensus card (Web Share / copy link / save as PNG). No third-party logos, trademarks, or font files; all icons are hand-drawn inline SVG.
+- **Design**: Google-Finance-style information architecture (desktop 3 columns: list · market overview · "AI 研究" panel; index cards with sparklines; accordion market summary; 最新动态 feed; quote page with range tabs, crosshair chart and key stats) rendered in iOS-style "Liquid Glass" materials: frosted sticky nav bar, floating capsule tab bar on mobile, large titles that collapse into the nav bar, a soft Morandi palette (warm greige #f3efe9 background, off-white cards, dusty-rose up / sage down / blue-gray accent, subtle fills), editorial typography with light numerals, spring press/page motion, and automatic warm-charcoal dark mode. Signature "activity rings" card (涨势 / 跌势 / 散户情绪), iMessage-style debate bubbles, and a shareable consensus card (Web Share / copy link / save as PNG). No third-party logos or trademarks; all icons are hand-drawn inline SVG.
 - **Search**: client-side ticker/name search over focus + watchlist stocks (keyboard: `/`, ↑↓, Enter). A watchlist-only ticker opens a lightweight quote page.
 - **Gestures**: swipe right from the left edge on detail pages to go back.
 - **首页 (home)**: date, one-line market takeaway, index chips, and 7 "重点关注" cards (price, day %, week %, 1-month sparkline, one-line reason).
@@ -20,7 +22,13 @@ Desktop (1440): ![](screenshots/d1-home.png)
 - **关于 (about)**: problem, solution, pipeline, and design choices, written for recruiters.
 - Colors follow the Chinese convention: **red = up, green = down**.
 - **PWA**: manifest, icons, and a service worker (app shell cache-first, data network-first, works offline). "添加到主屏幕" works on iOS and Android.
-- **China-friendly**: no Google Fonts, no CDNs, no third-party JS. System fonts only, zero dependencies.
+- **China-friendly**: no Google Fonts CDN, no CDNs, no third-party JS, zero dependencies. Body text uses system fonts; only the wordmark uses self-hosted font subsets (see below).
+- **Wordmark drafts**: three switchable versions of 「绿仔的投资小屋」 via `?logo=a|b|c` (remembered in localStorage):
+  - **A** brush calligraphy + brick-red seal 「绿」 (Ma Shan Zheng)
+  - **B** rounded and cute + house-with-leaf mark (ZCOOL KuaiLe)
+  - **C** editorial Song-style serif + thin rules + ring monogram (ZCOOL XiaoWei)
+
+  Fonts come from [google/fonts](https://github.com/google/fonts) `ofl/`, are licensed under **SIL Open Font License 1.1** (see `assets/fonts/OFL-*.txt`), and are subset with `pyftsubset` to just these 7 characters as woff2 (1–4 KB each). Previews: `screenshots/wordmark-{a,b,c}.png`, `screenshots/draft-{a,b,c}-mobile-home.png`.
 - **Privacy**: only tickers, prices, moves and analysis are shown. No position size, cost or P&L. The converter normalizes wording to "重点关注", applies optional private scrub rules from a git-ignored `tools/scrub_local.json`, and aborts if cost/P&L-like fields show up.
 
 ## Structure

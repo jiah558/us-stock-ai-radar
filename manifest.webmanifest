@@ -1,14 +1,14 @@
 {
-  "name": "美股 AI 雷达",
-  "short_name": "美股雷达",
+  "name": "绿仔的投资小屋",
+  "short_name": "投资小屋",
   "description": "每天用中文读懂美股涨跌原因 · AI 多流派辩论",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f5f5f7",
-  "theme_color": "#f5f5f7",
+  "background_color": "#f3efe9",
+  "theme_color": "#f3efe9",
   "icons": [
     {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
     {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},

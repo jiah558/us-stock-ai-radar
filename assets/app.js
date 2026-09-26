@@ -1,4 +1,4 @@
-/* 美股 AI 雷达 — zero-dependency SPA (Material-style light UI). Data: data/index.json + data/reports/<date>.json */
+/* 绿仔的投资小屋 — zero-dependency SPA (Google-Finance layout, Morandi palette). Data: data/index.json + data/reports/<date>.json */
 (() => {
 'use strict';
 const $ = (s, el = document) => el.querySelector(s);
@@ -35,21 +35,34 @@ const I = {
   trend: '<path d="M3 17.5l5.5-5.5 4 4L21 7.5"/><path d="M15.5 7.5H21V13"/><path d="M3 21h18" opacity=".45"/>',
   share: '<path d="M12 3.5v11M8 7l4-3.5L16 7"/><path d="M7.5 10.5H6a1.5 1.5 0 00-1.5 1.5v7A1.5 1.5 0 006 20.5h12a1.5 1.5 0 001.5-1.5v-7a1.5 1.5 0 00-1.5-1.5h-1.5"/>',
   image: '<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 17l5-4.5 3.5 3 3-2.5L20 17"/>',
+  aup: '<path d="M12 18.5v-13M6.5 11L12 5.5l5.5 5.5"/>',
+  adn: '<path d="M12 5.5v13M6.5 13l5.5 5.5 5.5-5.5"/>',
   home: '<path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 01-1.5 1.5H15V15h-6v5.5H5.5A1.5 1.5 0 014 19z"/>',
 };
 const FILLED = {
   spark: '<path d="M11 2.5c.7 5 3.6 7.9 8.6 8.6-5 .7-7.9 3.6-8.6 8.6-.7-5-3.6-7.9-8.6-8.6 5-.7 7.9-3.6 8.6-8.6z"/><path d="M19.3 14.8c.3 2 1.5 3.2 3.4 3.5-2 .3-3.1 1.5-3.4 3.4-.3-2-1.5-3.1-3.5-3.4 2-.3 3.2-1.5 3.5-3.5z" opacity=".75"/>',
   up: '<circle cx="12" cy="12" r="10"/><path d="M12 17.2V7.3M7.6 11.4L12 7l4.4 4.4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
   dn: '<circle cx="12" cy="12" r="10"/><path d="M12 6.8v9.9M7.6 12.6L12 17l4.4-4.4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
-  aup: '<path d="M12 4.5l6.5 7h-4.3V19.5H9.8V11.5H5.5z"/>',
-  adn: '<path d="M12 19.5l6.5-7h-4.3V4.5H9.8v8H5.5z"/>',
+
   send: '<path d="M12 5.2l6.2 6.2-1.5 1.5-3.6-3.6V19h-2.2V9.3l-3.6 3.6-1.5-1.5z"/>',
 };
 const svg = (k, cls = '') => FILLED[k]
   ? `<svg class="ic ${cls}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${FILLED[k]}</svg>`
   : `<svg class="ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[k]}</svg>`;
 const sparkSearch = `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M14.6 15.6L20 21" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M18 2.2c.3 2 1.4 3.1 3.4 3.4-2 .3-3.1 1.4-3.4 3.4-.3-2-1.4-3.1-3.4-3.4 2-.3 3.1-1.4 3.4-3.4z" fill="currentColor"/></svg>`;
-const LOGO = `<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14.5" fill="#e8f0fe"/><circle cx="16" cy="16" r="10" fill="none" stroke="#a8c7fa" stroke-width="1.6"/><circle cx="16" cy="16" r="5.5" fill="none" stroke="#a8c7fa" stroke-width="1.6"/><path d="M5.5 20.5l5-4.2 3.6 2.4 5.2-6.2 3.3 1.6 4.4-5.6" fill="none" stroke="#d93025" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="8.5" r="2.2" fill="#1a73e8"/></svg>`;
+const APP = '绿仔的投资小屋';
+/* three wordmark drafts, switchable via ?logo=a|b|c (remembered in localStorage) */
+const LOGO_V = (() => { const m = location.search.match(/[?&]logo=([abc])/); try { if (m) localStorage.setItem('logo', m[1]); return m ? m[1] : (localStorage.getItem('logo') || 'a'); } catch (e) { return m ? m[1] : 'a'; } })();
+document.documentElement.dataset.logo = LOGO_V;
+const MARKS = {
+  // A: brush seal — a soft brick-red square chop with the character 绿
+  a: `<svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="3" width="34" height="34" rx="7" class="mk-fill"/><rect x="6.5" y="6.5" width="27" height="27" rx="4.5" fill="none" class="mk-line" stroke-width="1"/><text x="20" y="28.6" text-anchor="middle" class="mk-ch">绿</text></svg>`,
+  // B: rounded little house with a sprouting leaf on the roof
+  b: `<svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 19.5L20 9l13 10.5V31a3 3 0 01-3 3H10a3 3 0 01-3-3z" class="mk-fill"/><path d="M16.5 34v-7.2a3.5 3.5 0 017 0V34" class="mk-door"/><path d="M26.5 12.5c.2-3.6 2.6-6 6.6-6.3-.1 3.9-2.6 6.4-6.6 6.3z" class="mk-leaf"/><path d="M26.5 12.5c1.5-1.9 3.2-3.3 5-4.3" class="mk-vein" fill="none" stroke-width="1" stroke-linecap="round"/></svg>`,
+  // C: editorial monogram — thin double ring around a serif 绿
+  c: `<svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" class="mk-line" stroke-width="1.1"/><circle cx="20" cy="20" r="15" fill="none" class="mk-line" stroke-width=".5"/><text x="20" y="27.2" text-anchor="middle" class="mk-ch">绿</text></svg>`,
+};
+const wordmark = (cls = '') => `<span class="wm wm-${LOGO_V} ${cls}" aria-label="${APP}">${MARKS[LOGO_V]}<span class="wm-t" aria-hidden="true">${LOGO_V === 'c' ? '<i class="wm-rule"></i>' : ''}绿仔的投资小屋${LOGO_V === 'c' ? '<i class="wm-rule"></i>' : ''}</span></span>`;
 
 const SCHOOLS = {
   '价值派': { k: 'value', v: 'val', desc: '估值、安全边际、现金流' },
@@ -70,7 +83,7 @@ const fmtPx = v => v == null ? '—' : v.toLocaleString('en-US', { minimumFracti
 /** Material-style change pill: tonal background + arrow, unsigned percent */
 const pill = (v, big) => `<span class="pill num ${cls(v)}${big ? ' lg' : ''}">${v ? svg(v > 0 ? 'aup' : 'adn') : ''}${v == null ? '—' : Math.abs(v).toFixed(2) + '%'}</span>`;
 /** list-style change: colored signed % + small filled circle arrow */
-const chgArrow = v => `<span class="ca num ${cls(v)}">${fmtPct(v)}${v ? svg(v > 0 ? 'up' : 'dn') : ''}</span>`;
+const chgArrow = v => `<span class="ca num ${cls(v)}">${v ? svg(v > 0 ? 'aup' : 'adn') : ''}${fmtPct(v)}</span>`;
 function md(s) {
   let h = esc(s);
   h = h.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -116,7 +129,7 @@ function spark(series, { w = 120, h = 40, base = true, fill = true } = {}) {
   const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join('');
   const col = v[v.length - 1] >= v[0] ? 'var(--up)' : 'var(--dn)';
   const id = 'sg' + (++gid);
-  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${fill ? `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${col};stop-opacity:.24"/><stop offset="1" style="stop-color:${col};stop-opacity:.02"/></linearGradient></defs><path d="${d}L${w} ${h}L0 ${h}Z" fill="url(#${id})"/>` : ''}${base ? `<line class="basel" x1="0" x2="${w}" y1="${Y(v[0])}" y2="${Y(v[0])}" stroke-width="1" stroke-dasharray="1 3" vector-effect="non-scaling-stroke"/>` : ''}<path d="${d}" fill="none" style="stroke:${col};color:${col}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${fill ? `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${col};stop-opacity:.13"/><stop offset="1" style="stop-color:${col};stop-opacity:.02"/></linearGradient></defs><path d="${d}L${w} ${h}L0 ${h}Z" fill="url(#${id})"/>` : ''}${base ? `<line class="basel" x1="0" x2="${w}" y1="${Y(v[0])}" y2="${Y(v[0])}" stroke-width="1" stroke-dasharray="1 3" vector-effect="non-scaling-stroke"/>` : ''}<path d="${d}" fill="none" style="stroke:${col};color:${col}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
 /* ---------- main quote chart ---------- */
@@ -153,7 +166,7 @@ function mountChart(box, s) {
     return `<g class="mk" data-n="${n}"><line x1="${x}" x2="${x}" y1="${by + (by < y ? 8 : -8)}" y2="${y + (by < y ? -4 : 4)}" class="mks" stroke-width="1.2"/><circle class="mkd" cx="${x}" cy="${y}" r="3.6" stroke-width="2"/><g transform="translate(${x},${by})"><circle class="mkb" r="8.5"/><text y="3.7" text-anchor="middle" class="mkn">${n + 1}</text></g></g>`; }).join('');
   const id = 'cg' + (++gid);
   plot.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(s.ticker)} ${RLABEL[k]}价格走势">
-    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${col};stop-opacity:.22"/><stop offset="1" style="stop-color:${col};stop-opacity:0"/></linearGradient></defs>
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${col};stop-opacity:.12"/><stop offset="1" style="stop-color:${col};stop-opacity:0"/></linearGradient></defs>
     ${g}${xl}<path d="${d}L${X(S.length - 1)} ${H - pb}L${X(0)} ${H - pb}Z" fill="url(#${id})"/>${bl}
     <path class="ln" d="${d}" fill="none" style="stroke:${col};color:${col};stroke-dasharray:1;stroke-dashoffset:${NOANIM ? 0 : 1}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" pathLength="1"/>
     <line class="cx" x1="0" x2="0" y1="${pt - 6}" y2="${H - pb}" stroke-width="1" opacity="0"/>
@@ -218,7 +231,7 @@ function appbar(ctx, back, navTitle = '') {
   const { idx, rep } = ctx;
   const dsel = idx && rep ? `<label class="dsel press" title="选择日报日期">${svg('cal')}<select id="dateSel" aria-label="选择日报日期">${idx.reports.map(r => `<option value="${r.date}" ${r.date === rep.date ? 'selected' : ''}>${shortD(r.date)} ${dparts(r.date).wd}</option>`).join('')}</select>${svg('down', 'dd')}</label>` : '';
   return `<header class="appbar glass"><div class="ab">
-    <div class="ab-l">${back ? `<a class="ib back press" href="${back}" aria-label="返回">${svg('back')}</a>` : ''}<a class="brand press" href="#/" aria-label="美股 AI 雷达 首页">${LOGO}<span class="bn"><b>美股</b> AI 雷达</span></a></div>
+    <div class="ab-l">${back ? `<a class="ib back press" href="${back}" aria-label="返回">${svg('back')}</a>` : ''}<a class="brand press" href="#/" aria-label="${APP} 首页">${wordmark()}</a></div>
     <div class="ab-t" aria-hidden="true">${navTitle}</div>
     <div class="ab-c">${searchBox(false)}</div>
     <div class="ab-r"><button class="ib sbtn press" type="button" aria-label="搜索">${svg('search')}</button>${dsel}<a class="ib hide-m press" href="#/about" aria-label="关于" title="关于项目">${svg('info')}</a></div>
@@ -238,7 +251,7 @@ function leftHTML(rep, cur) {
     <section class="lsec"><div class="lsh"><h3>指数</h3></div>
       ${ix.map(x => row(x.name, x.symbol.replace('^', ''), x.symbol === '^TNX' ? x.price.toFixed(2) + '%' : fmtPx(x.price), x.day, '#/', '', false)).join('')}</section>`;
 }
-const disclaimer = rep => `<footer class="foot"><p><b>免责声明</b>：本站内容由 AI 基于公开信息自动整理与生成，包括“流派辩论”在内的观点均为 AI 模拟，可能存在错误或遗漏；<b>不构成任何投资建议</b>。投资有风险，决策请独立判断。${rep ? `行情来源：Yahoo Finance 日线收盘；数据截至美东 ${rep.date} 收盘。颜色约定：红涨绿跌。` : ''}</p><div class="fl">© ${new Date().getFullYear()} Rein · 美股 AI 雷达<span>·</span><a href="#/about">关于</a><span>·</span><a href="#/sources">信息来源</a></div></footer>`;
+const disclaimer = rep => `<footer class="foot"><p><b>免责声明</b>：本站内容由 AI 基于公开信息自动整理与生成，包括“流派辩论”在内的观点均为 AI 模拟，可能存在错误或遗漏；<b>不构成任何投资建议</b>。投资有风险，决策请独立判断。${rep ? `行情来源：Yahoo Finance 日线收盘；数据截至美东 ${rep.date} 收盘。颜色约定：红涨绿跌。` : ''}</p><div class="fl">© ${new Date().getFullYear()} Rein · ${APP}<span>·</span><a href="#/about">关于</a><span>·</span><a href="#/sources">信息来源</a></div></footer>`;
 const TABBAR = [['#/', 'home', '首页'], ['#/w', 'grid', '自选'], ['#/about', 'info', '关于'], ['#/sources', 'doc', '来源']];
 const tabbar = active => `<nav class="tabbar glass" aria-label="主导航">${TABBAR.map(([h, k, n]) => `<a href="${h}" class="press${active === h ? ' on' : ''}" ${active === h ? 'aria-current="page"' : ''}>${svg(k)}<span>${n}</span></a>`).join('')}</nav>`;
 function page(ctx, { tab, back, cur, center, right = '', rightMobile = false, after = '', title = '', sub = '', navTitle = '' }) {
@@ -322,7 +335,7 @@ function researchHTML(rep, mode) {
     ${cons}
     ${mode === 'panel' ? `<div class="rs-sub">探索更多</div>
     <div class="xchips"><a class="xchip" href="#/w">${svg('grid')}自选速览与板块热力</a><a class="xchip" href="#/s/${esc(byMove[0].ticker)}/debate">${svg('users')}观看四派圆桌辩论</a><a class="xchip" href="#/about">${svg('layers')}AI 工作流是怎么做的</a><a class="xchip" href="#/sources">${svg('doc')}查看信息来源</a></div>
-    <form class="prompt" autocomplete="off"><input type="text" placeholder="问问 AI 雷达，如：NBIS 为什么大涨？" aria-label="输入问题或股票代码"><div class="pbar"><span class="faint small">基于今日日报 · 非投资建议</span><button class="send" type="submit" aria-label="发送">${svg('send')}</button></div><div class="phint small" aria-live="polite"></div></form>` : ''}
+    <form class="prompt" autocomplete="off"><input type="text" placeholder="问问小屋 AI，如：NBIS 为什么大涨？" aria-label="输入问题或股票代码"><div class="pbar"><span class="faint small">基于今日日报 · 非投资建议</span><button class="send" type="submit" aria-label="发送">${svg('send')}</button></div><div class="phint small" aria-live="polite"></div></form>` : ''}
   </div>`;
 }
 function wireResearch() {
@@ -351,11 +364,11 @@ function ringsCard(rep) {
   return `<section class="rings card" aria-label="今日强弱环">
     <svg class="rg-svg" viewBox="0 0 128 128" role="img" aria-label="涨势 ${fmtPct(au)}，跌势 ${fmtPct(-ad)}，散户看多 ${sent == null ? '—' : Math.round(sent * 100) + '%'}">${rings.map(ring).join('')}</svg>
     <div class="rg-lg">
-      <div class="rgi"><span class="k r-up">涨势</span><b class="num up">${fmtPct(au)}</b><small>${ups.length} 只上涨 · 平均涨幅</small></div>
-      <div class="rgi"><span class="k r-dn">跌势</span><b class="num dn">${fmtPct(-ad)}</b><small>${dns.length} 只下跌 · 平均跌幅</small></div>
-      <div class="rgi"><span class="k r-se">情绪</span><b class="num se">${sent == null ? '—' : '看多 ' + Math.round(sent * 100) + '%'}</b><small>StockTwits 已标注帖子</small></div>
+      <div class="rgi"><span class="k"><i class="kd r-up"></i>涨势</span><b class="num up">${fmtPct(au)}</b><small>${ups.length} 只上涨 · 平均涨幅</small></div>
+      <div class="rgi"><span class="k"><i class="kd r-dn"></i>跌势</span><b class="num dn">${fmtPct(-ad)}</b><small>${dns.length} 只下跌 · 平均跌幅</small></div>
+      <div class="rgi"><span class="k"><i class="kd r-se"></i>情绪</span><b class="num se">${sent == null ? '—' : Math.round(sent * 100) + '%'}</b><small>散户看多占比 · StockTwits</small></div>
     </div>
-    <div class="rg-foot"><div class="brd" role="img" aria-label="自选 ${all.length} 只，${wu} 涨 ${wd} 跌"><i class="up-bg" style="flex:${wu}"></i><i class="fl-bg" style="flex:${all.length - wu - wd}"></i><i class="dn-bg" style="flex:${wd}"></i></div><span>自选 ${all.length} 只 · <b class="up">${wu} 涨</b> / <b class="dn">${wd} 跌</b> · 满环 = 平均涨跌 ${GOAL}%</span></div>
+    <div class="rg-foot"><div class="brd" role="img" aria-label="自选 ${all.length} 只，${wu} 涨 ${wd} 跌"><i class="up-bg" style="flex:${wu}"></i><i class="fl-bg" style="flex:${all.length - wu - wd}"></i><i class="dn-bg" style="flex:${wd}"></i></div><span>自选 ${all.length} 只 · ${wu} 涨 / ${wd} 跌<em>满环 = 平均涨跌 ${GOAL}%</em></span></div>
   </section>`;
 }
 function accItem(title, body, { open = false, ai = false, srcs = 0, extra = '' } = {}) {
@@ -396,9 +409,9 @@ async function pageHome() {
   const center = `
     <div class="dateline sd-only"><span class="live">${svg('spark')}AI 日报</span><span>美东 ${p.m}月${p.d}日 ${p.wd} 收盘</span><span class="dot-sep"></span><span>北京时间 ${bj.m}/${bj.d} ${bj.wd}</span></div>
     <div class="hero-grid">
-      <section class="hero card"><div class="hero-k"><span class="live">${svg('spark')}AI 日报</span>重点关注</div>
-        <div class="hero-n"><span class="num">${rep.focus.length}</span> 只 · <span class="up"><span class="num">${nUp}</span> 涨</span> <span class="dn"><span class="num">${nDn}</span> 跌</span></div>
-        <p class="hero-p">${md2(hTitle)}</p></section>
+      <section class="hero card"><div class="hero-k">今日 · 重点关注</div>
+        <div class="hero-n"><span class="big num">${rep.focus.length}</span><span class="unit">只</span><span class="split"><span><em class="num up">${nUp}</em>涨</span><i></i><span><em class="num dn">${nDn}</em>跌</span></span></div>
+        <p class="hero-p">${md2(hTitle)}</p><span class="live">${svg('spark')}AI 日报</span></section>
       ${ringsCard(rep)}
     </div>
     ${indexCards(rep)}
@@ -408,7 +421,7 @@ async function pageHome() {
     ${evs.length ? `<section class="sec"><div class="shr"><h2 class="sh">最新动态</h2><span class="badge-live">AI 摘要</span></div>${newsList(rep, evs, { limit: 5 })}</section>` : ''}
     ${nxt.length ? `<section class="sec"><h2 class="sh">下周关注</h2><div class="cal">${nxt.map(e => `<div class="ce"><span class="cd">${svg('cal')}</span><div><b>${md2(e.d)}</b><p>${md(e.t)}</p></div></div>`).join('')}</div></section>` : ''}
     <section class="sec"><div class="shr"><h2 class="sh">自选异动</h2><a class="more" href="#/w">全部 ${rep.watch.all.length} 只 ${svg('right')}</a></div><div class="wlist">${rep.watch.all.slice(0, 5).map(x => wlRow(x, false)).join('')}</div></section>`;
-  app.innerHTML = page(ctx, { tab: '#/', center, right: researchHTML(rep, 'panel'), title: '美股 AI 雷达', sub: `美东 ${p.m}月${p.d}日 ${p.wd}收盘 · 北京时间 ${bj.m}/${bj.d} ${bj.wd}` });
+  app.innerHTML = page(ctx, { tab: '#/', center, right: researchHTML(rep, 'panel'), title: wordmark('wm-lg'), navTitle: wordmark('wm-sm'), sub: `美东 ${p.m}月${p.d}日 ${p.wd}收盘 · 北京时间 ${bj.m}/${bj.d} ${bj.wd}` });
   const ic = $('.icards'), nb = $('.icnext');
   const upd = () => nb.classList.toggle('show', ic.scrollWidth - ic.clientWidth - ic.scrollLeft > 8);
   ic.addEventListener('scroll', upd, { passive: true }); upd(); nb.addEventListener('click', () => ic.scrollBy({ left: 320, behavior: 'smooth' }));
@@ -433,7 +446,7 @@ function debateHTML(s, rep) {
     ${d.opening.map(x => bubble(x, 1)).join('')}
     ${d.rebuttal.length ? `<div class="round r2" ${NOANIM ? '' : 'style="display:none"'}><span>第二轮 · 交锋反驳</span></div>${d.rebuttal.map(x => bubble(x, 2)).join('')}` : ''}
     <div class="consensus share-card ${NOANIM ? '' : 'hide'}">
-      <div class="sc-top"><span class="sc-brand">${LOGO}美股 AI 雷达</span><span class="sc-date num">美东 ${rep.date}</span></div>
+      <div class="sc-top"><span class="sc-brand">${wordmark('wm-xs')}</span><span class="sc-date num">美东 ${rep.date}</span></div>
       <div class="h"><span class="sc-tk">${esc(s.ticker)}</span><span>四大流派共识</span></div>
       <p>${md(d.consensus)}</p>
       <div class="sc-foot"><span class="avs">${names.map(n => avatar(n, true)).join('')}</span><span>价值 · 成长 · 技术 · 宏观 · AI 模拟，非投资建议</span></div>
@@ -543,10 +556,10 @@ function pageQuote(ctx, tk) {
 }
 
 const heatBg = v => { const a = Math.min(1, Math.abs(v || 0) / 5);
-  if (!v) return DARK.matches ? ['#2c2c2e', '#d1d1d6'] : ['#f2f2f7', '#3a3a3c'];
+  if (!v) return DARK.matches ? ['#2f2b28', '#cfc7be'] : ['#efebe5', '#5b534c'];
   const mix = (c1, c2, t) => '#' + [0, 2, 4].map(i => Math.round(parseInt(c1.substr(i + 1, 2), 16) * (1 - t) + parseInt(c2.substr(i + 1, 2), 16) * t).toString(16).padStart(2, '0')).join('');
-  if (DARK.matches) return v > 0 ? [mix('#2a1716', '#ff453a', .25 + a * .7), a > .4 ? '#fff' : '#ffb4ae'] : [mix('#132419', '#30d158', .2 + a * .6), a > .5 ? '#04210f' : '#a6f0bb'];
-  return v > 0 ? [mix('#ffecea', '#ff3b30', a * .92), a > .45 ? '#fff' : '#c4281f'] : [mix('#e6f7eb', '#28b04f', a * .92), a > .45 ? '#fff' : '#17843a']; };
+  if (DARK.matches) return v > 0 ? [mix('#2e2523', '#a8625b', .15 + a * .75), a > .5 ? '#f6e9e6' : '#e0aaa2'] : [mix('#232824', '#5f7e67', .15 + a * .75), a > .5 ? '#e8f0ea' : '#a9c4b0'];
+  return v > 0 ? [mix('#f5ebe8', '#b86a61', a * .85), a > .55 ? '#fbf6f4' : '#9a4f48'] : [mix('#ebf0ea', '#6f8f77', a * .85), a > .55 ? '#f6f9f6' : '#4f6d57']; };
 const heatTile = (it, on) => { const [b, f] = heatBg(it.day); return `<a class="h${on ? ' on' : ''}" href="#/s/${esc(it.ticker)}" style="background:${b};color:${f}"><b>${esc(it.ticker)}</b><span class="num">${fmtPct(it.day)}</span></a>`; };
 
 async function pageWatch() {
@@ -589,7 +602,7 @@ async function pageAbout() {
   </div></section>
   <section class="sec"><h2 class="sh">设计取舍</h2><div class="ocard"><ul class="bl">
     <li><strong>移动优先 + PWA</strong>：可“添加到主屏幕”，离线可读上一次的日报。</li>
-    <li><strong>大陆网络友好</strong>：不依赖 Google Fonts 或任何外部 CDN，所有资源本地打包，使用系统字体。</li>
+    <li><strong>大陆网络友好</strong>：不依赖 Google Fonts 或任何外部 CDN，所有资源本地打包；正文用系统字体，只有 Logo 字标用自托管的开源字体子集（SIL OFL 1.1，每个仅 1–4 KB）。</li>
     <li><strong>数据可追溯</strong>：价格来自真实日线数据，文中观点附信息来源链接；不编造数据。</li>
     <li><strong>隐私</strong>：公开页面只展示代码、价格、涨跌与分析，不展示任何个人仓位、成本或盈亏。</li>
     <li><strong>红涨绿跌</strong>：沿用中国投资者习惯的颜色约定。</li>
@@ -597,7 +610,7 @@ async function pageAbout() {
   </ul></div></section>
   <section class="sec"><h2 class="sh">作者</h2><div class="ocard author"><div class="ph-av">R</div><div><b>Rein</b><div class="faint">独立开发 · 设计、数据管线与 AI 工作流均由本人完成</div></div></div></section>
   <p class="faint small center">已收录 ${n} 期日报 · 每个美股交易日自动更新</p>`;
-  app.innerHTML = page(ctx, { tab: '#/about', center, right: rep ? researchHTML(rep, 'panel') : '', title: '关于项目', sub: 'About · 美股 AI 雷达' });
+  app.innerHTML = page(ctx, { tab: '#/about', center, right: rep ? researchHTML(rep, 'panel') : '', title: '关于项目', sub: 'About · ' + APP });
   if (rep) { wireResearch(); wirePrompt(rep); }
 }
 
@@ -615,28 +628,28 @@ async function pageSources() {
 function toast(msg) { let t = $('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast glass'; t.setAttribute('role', 'status'); document.body.appendChild(t); } t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2200); }
 const shareURL = s => location.href.split('#')[0].split('?')[0] + '#/s/' + s.ticker + '/debate';
 async function shareConsensus(s, rep) {
-  const text = `【${s.ticker} 四大流派共识｜美东 ${rep.date}】${plain(s.debate.consensus)}（美股 AI 雷达 · AI 模拟，非投资建议）`;
+  const text = `【${s.ticker} 四大流派共识｜美东 ${rep.date}】${plain(s.debate.consensus)}（${APP} · AI 模拟，非投资建议）`;
   if (navigator.share) { try { await navigator.share({ title: `${s.ticker} 四大流派共识`, text, url: shareURL(s) }); } catch (e) { /* cancelled */ } return; }
   try { await navigator.clipboard.writeText(text + ' ' + shareURL(s)); toast('已复制分享文案与链接'); } catch (e) { toast('无法访问剪贴板，请手动复制'); }
 }
 function consensusPNG(s, rep) {
   const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
   const FONT = '-apple-system,"SF Pro Display","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#0a84ff'); bg.addColorStop(.55, '#5e5ce6'); bg.addColorStop(1, '#bf5af2');
+  const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#8a9aa6'); bg.addColorStop(.55, '#a89aa6'); bg.addColorStop(1, '#c4a99c');
   g.fillStyle = bg; g.fillRect(0, 0, W, H);
   const rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
-  g.fillStyle = 'rgba(255,255,255,.96)'; rr(72, 150, W - 144, H - 300, 56); g.fill();
-  g.fillStyle = '#fff'; g.font = `600 40px ${FONT}`; g.fillText('美股 AI 雷达', 80, 100);
+  g.fillStyle = 'rgba(251,249,246,.97)'; rr(72, 150, W - 144, H - 300, 56); g.fill();
+  g.fillStyle = '#fff'; g.font = `600 40px ${FONT}`; g.fillText(APP, 80, 100);
   g.font = `400 32px ${FONT}`; g.textAlign = 'right'; g.fillText('美东 ' + rep.date, W - 80, 100); g.textAlign = 'left';
-  g.fillStyle = '#1d1d1f'; g.font = `700 88px ${FONT}`; g.fillText(s.ticker, 136, 290);
-  g.fillStyle = '#6e6e73'; g.font = `500 40px ${FONT}`; g.fillText('四大流派共识结论', 136, 356);
-  const cols = ['#ff9500', '#af52de', '#32ade6', '#5856d6'], names = ['价值', '成长', '技术', '宏观'];
-  cols.forEach((col, i) => { g.fillStyle = col; g.beginPath(); g.arc(160 + i * 150, 430, 18, 0, 7); g.fill(); g.fillStyle = '#3a3a3c'; g.font = `500 30px ${FONT}`; g.fillText(names[i], 186 + i * 150, 441); });
-  g.fillStyle = '#1d1d1f'; g.font = `400 44px ${FONT}`;
+  g.fillStyle = '#2f2b27'; g.font = `500 84px ${FONT}`; g.fillText(s.ticker, 136, 290);
+  g.fillStyle = '#8a8078'; g.font = `400 38px ${FONT}`; g.fillText('四大流派共识结论', 136, 356);
+  const cols = ['#b08a4f', '#957aa0', '#6a939a', '#7a7fa6'], names = ['价值', '成长', '技术', '宏观'];
+  cols.forEach((col, i) => { g.fillStyle = col; g.beginPath(); g.arc(160 + i * 150, 430, 18, 0, 7); g.fill(); g.fillStyle = '#4d4640'; g.font = `400 30px ${FONT}`; g.fillText(names[i], 186 + i * 150, 441); });
+  g.fillStyle = '#2f2b27'; g.font = `400 42px ${FONT}`;
   let line = '', y = 540; const maxW = W - 272;
   for (const ch of plain(s.debate.consensus)) { if (g.measureText(line + ch).width > maxW) { g.fillText(line, 136, y); line = ''; y += 72; if (y > H - 260) break; } line += ch; }
   if (line && y <= H - 260) g.fillText(line, 136, y);
-  g.fillStyle = '#8e8e93'; g.font = `400 30px ${FONT}`; g.fillText('AI 基于公开信息模拟 · 不构成投资建议', 136, H - 200);
+  g.fillStyle = '#9a9088'; g.font = `400 30px ${FONT}`; g.fillText('AI 基于公开信息模拟 · 不构成投资建议', 136, H - 200);
   g.fillStyle = 'rgba(255,255,255,.9)'; g.font = `400 30px ${FONT}`; g.textAlign = 'center'; g.fillText(location.host + location.pathname, W / 2, H - 70);
   c.toBlob(async blob => {
     const file = new File([blob], `${s.ticker}-consensus-${rep.date}.png`, { type: 'image/png' });
