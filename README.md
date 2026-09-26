@@ -4,13 +4,18 @@ A mobile-first PWA that explains, in Simplified Chinese, **why US stocks moved t
 
 > AI-generated content, not investment advice. 本站内容由 AI 自动生成，不构成投资建议。
 
-| 首页 | 个股 + 走势标注 | AI 流派辩论 | 关于 |
+| 首页（浅色） | 首页（深色） | 个股 + 走势标注 | AI 流派辩论 |
 |---|---|---|---|
-| ![](screenshots/01-home.png) | ![](screenshots/02-stock-IREN.png) | ![](screenshots/03-stock-IREN-debate.png) | ![](screenshots/06-about.png) |
+| ![](screenshots/01-home.png) | ![](screenshots/11-dark-home.png) | ![](screenshots/02-stock-IREN.png) | ![](screenshots/03-stock-IREN-debate.png) |
+
+Desktop (1440): ![](screenshots/d1-home.png)
 
 ## Features
+- **Design**: Google-Finance-style information architecture (desktop 3 columns: list · market overview · "AI 研究" panel; index cards with sparklines; accordion market summary; 最新动态 feed; quote page with range tabs, crosshair chart and key stats) rendered in iOS-style "Liquid Glass" materials: frosted sticky nav bar, floating capsule tab bar on mobile, large titles that collapse into the nav bar, #f5f5f7 background with large-radius white cards, spring press/page motion, and automatic dark mode (true black, glowing red/green). Signature "activity rings" card (涨势 / 跌势 / 散户情绪), iMessage-style debate bubbles, and a shareable consensus card (Web Share / copy link / save as PNG). No third-party logos, trademarks, or font files; all icons are hand-drawn inline SVG.
+- **Search**: client-side ticker/name search over focus + watchlist stocks (keyboard: `/`, ↑↓, Enter). A watchlist-only ticker opens a lightweight quote page.
+- **Gestures**: swipe right from the left edge on detail pages to go back.
 - **首页 (home)**: date, one-line market takeaway, index chips, and 7 "重点关注" cards (price, day %, week %, 1-month sparkline, one-line reason).
-- **个股详情 (stock detail)**: price and moves, a ~1-month real daily-close chart with numbered markers for key news dates (tap to scrub), reasons, analyst views, a sentiment bar, and an animated **chat-style debate** (opening round → rebuttal round with @mentions → highlighted consensus card, plus a replay button).
+- **个股详情 (stock detail)**: price and moves, a real daily-close chart (5天 / 1个月 / 3个月 tabs; 1天 intraday is not collected) with numbered markers for key news dates (tap to scrub), reasons, analyst views, a sentiment bar, and an animated **chat-style debate** (opening round → rebuttal round with @mentions → highlighted consensus card, plus a replay button).
 - **自选速览 (watchlist)**: today's big movers with reasons, weekly movers, a sector heat map, and the full list sorted by absolute move.
 - **关于 (about)**: problem, solution, pipeline, and design choices, written for recruiters.
 - Colors follow the Chinese convention: **red = up, green = down**.
@@ -29,7 +34,7 @@ data/prices/YYYY-MM-DD.json          # raw Yahoo closes (build input, git-ignore
 tools/fetch_prices.py                # Yahoo chart API → data/prices/<date>.json (real prices only)
 tools/md2json.py                     # report Markdown + prices → data/reports/<date>.json, updates index.json
 tools/daily_update.sh                # fetch + convert (+ --push)
-tools/screenshots.py                 # local server + headless Chrome screenshots at 390×844
+tools/screenshots.py                 # local server + headless Chrome screenshots (390×844 light/dark, 1440×900)
 ```
 
 ## Daily update (how the automation plugs in)

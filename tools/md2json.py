@@ -22,6 +22,7 @@ INDICES = [("^GSPC", "标普500"), ("^IXIC", "纳斯达克"), ("^DJI", "道琼�
            ("^SOX", "费城半导体"), ("^VIX", "VIX 恐慌指数"), ("^TNX", "10年期美债")]
 SCHOOLS = ["价值派", "成长派", "技术派", "宏观派"]
 CHART_DAYS = 23  # ~1 month of sessions
+HIST_DAYS = 66   # ~3 months of sessions (optional "hist" series for the 3-month chart tab)
 
 # ---------------------------------------------------------------- privacy
 SCRUB = [
@@ -235,7 +236,8 @@ def convert(md, date, prices, wl_rows):
         q = prices.get(sym)
         if q and q["series"]:
             last, day, week = moves(q["series"], date)
-            indices.append({"symbol": sym, "name": name, "price": r2(last), "day": r2(day), "week": r2(week)})
+            indices.append({"symbol": sym, "name": name, "price": r2(last), "day": r2(day), "week": r2(week),
+                            "chart": [[d, round(c, 4)] for d, c in q["series"][-CHART_DAYS:]]})
 
     # focus ----------------------------------------------------------------
     fsec = secs.get("重点关注", [])
@@ -289,6 +291,7 @@ def convert(md, date, prices, wl_rows):
             last, day, week = moves(q["series"], date)
             st.update(price=r2(last), day=r2(day), week=r2(week))
             st["chart"] = [[d, round(c, 4)] for d, c in q["series"][-CHART_DAYS:]]
+            st["hist"] = [[d, round(c, 4)] for d, c in q["series"][-HIST_DAYS:]]
         else:
             o = one.get(tk, {})
             st.update(price=o.get("price_md"), day=o.get("day_md"), week=o.get("week_md"), chart=[])

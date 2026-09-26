@@ -1,5 +1,5 @@
 /* Service worker: app shell cache-first, data network-first (so new daily JSON shows up immediately, old ones work offline). */
-const VERSION = 'radar-v1';
+const VERSION = 'radar-v2-glass';
 const SHELL = ['./', 'index.html', 'assets/app.css', 'assets/app.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
