@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>刘嘉豪 · AI 作品集 2026</title>
+<style>
+:root{--bg:#efe9e1;--paper:#fbf9f6;--ink:#34302c;--muted:#7b736b;--faint:#a39a90;--sage:#8c9c88;--sage-d:#5d705e;--sage-l:#e4e9e1;--rose:#c09890;--rose-l:#f2e6e2;--blue:#7d8e9f;--blue-l:#e3e8ed;--sand:#ebe4da;--line:#e2dbd1}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Noto Sans CJK SC','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;color:var(--ink);background:var(--bg);font-size:9.6pt;line-height:1.62;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;margin:0 auto;padding:15mm 15mm 13mm;position:relative;overflow:hidden;background:var(--paper);page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+@media screen{.page{margin:10mm auto;box-shadow:0 6px 30px rgba(60,50,40,.12)}}
+.serif{font-family:'Noto Serif CJK SC','Noto Serif SC','Songti SC',serif}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:.01em}
+p{margin:0 0 2.2mm}
+.kicker{font-size:8pt;letter-spacing:.22em;color:var(--sage-d);text-transform:uppercase;font-weight:600}
+.ph{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:3mm;margin-bottom:5mm}
+.ph h2{font-size:19pt;font-family:'Noto Serif CJK SC',serif;font-weight:700}
+.ph .sub{color:var(--muted);font-size:9pt}
+.foot{position:absolute;left:15mm;right:15mm;bottom:7mm;display:flex;justify-content:space-between;font-size:7.5pt;color:var(--faint);border-top:1px solid var(--line);padding-top:2mm}
+.tag{display:inline-block;font-size:7.6pt;padding:.4mm 2.2mm;border-radius:10mm;background:var(--sage-l);color:var(--sage-d);margin:0 1.2mm 1.2mm 0;font-weight:500}
+.tag.rose{background:var(--rose-l);color:#9a6d64}.tag.blue{background:var(--blue-l);color:#586a7c}
+.card{background:#fff;border:1px solid var(--line);border-radius:3.5mm;padding:4mm 4.5mm}
+.card h4{font-size:10.5pt;margin-bottom:1.5mm}
+.muted{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm}
+ul{margin:0;padding-left:4.5mm}li{margin:0 0 1.2mm}
+.shot{border-radius:3mm;border:1px solid var(--line);box-shadow:0 3px 12px rgba(60,50,40,.10);display:block;width:100%}
+.cap{font-size:7.6pt;color:var(--muted);text-align:center;margin-top:1.5mm}
+.crop{aspect-ratio:1170/1850;object-fit:cover;object-position:top}
+.card.sm{padding:2.6mm 3.2mm;font-size:8.2pt;line-height:1.5}.card.sm h4{font-size:9.5pt;margin-bottom:1mm}
+.num{font-family:'Noto Serif CJK SC',serif;font-size:20pt;font-weight:700;color:var(--sage-d);line-height:1.1}
+.stat{background:var(--sand);border-radius:3mm;padding:3mm 3.5mm}
+.stat .l{font-size:8pt;color:var(--muted)}
+.hl{color:var(--sage-d);font-weight:700}
+.pending{color:#a25b4f;font-weight:600}
+/* cover */
+.cover{background:var(--bg);padding:0}
+.cover .inner{position:absolute;inset:0;padding:22mm 20mm}
+.cover .blob{position:absolute;border-radius:50%;filter:blur(0)}
+.cover h1{font-family:'Noto Serif CJK SC',serif;font-size:40pt;line-height:1.15;margin-top:14mm}
+.cover .role{font-size:13pt;margin-top:6mm;color:var(--ink)}
+.cover .meta{margin-top:5mm;color:var(--muted);font-size:10pt;line-height:1.9}
+.toc{position:absolute;left:20mm;right:20mm;bottom:22mm;display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}
+.toc .t{background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:3mm;padding:3.5mm}
+.toc .t b{display:block;font-size:10pt;margin:1mm 0}
+.toc .t span{font-size:7.8pt;color:var(--muted)}
+.toc .n{font-family:'Noto Serif CJK SC',serif;color:var(--sage-d);font-size:14pt;font-weight:700}
+/* pipeline */
+.pipe{display:flex;align-items:stretch;gap:0;margin:2mm 0 1mm}
+.pipe .st{flex:1;background:#fff;border:1px solid var(--line);border-radius:3mm;padding:3mm 2.6mm;font-size:8pt;line-height:1.5;position:relative}
+.pipe .st b{display:block;font-size:9pt;margin-bottom:1mm;color:var(--ink)}
+.pipe .st .i{display:inline-block;width:5.5mm;height:5.5mm;border-radius:50%;background:var(--sage);color:#fff;font-size:7.5pt;text-align:center;line-height:5.5mm;margin-bottom:1mm;font-weight:700}
+.pipe .ar{width:5mm;display:flex;align-items:center;justify-content:center;color:var(--sage);font-size:12pt}
+.st.rose .i{background:var(--rose)}.st.blue .i{background:var(--blue)}
+.iter{display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm}
+.iter .v{font-size:8pt}
+.iter .v b{display:block;font-size:9pt;margin:1.5mm 0 .5mm}
+.step{display:inline-block;background:var(--ink);color:#fff;border-radius:2mm;font-size:7.5pt;padding:.2mm 2mm}
+.quote{border-left:3px solid var(--rose);background:var(--rose-l);padding:3mm 4mm;border-radius:0 3mm 3mm 0;font-size:10pt}
+.qr{width:24mm;height:24mm;border-radius:2mm;border:1px solid var(--line);background:#fff;padding:1mm}
+a{color:var(--sage-d);text-decoration:none}
+table.t{width:100%;border-collapse:collapse;font-size:8.4pt}
+table.t td,table.t th{border-bottom:1px solid var(--line);padding:1.6mm 1.5mm;text-align:left;vertical-align:top}
+table.t th{color:var(--muted);font-weight:500;font-size:7.8pt}
+</style>
+</head>
+<body>
+<div class="dlbar" style="max-width:210mm;margin:6mm auto 0;display:flex;gap:3mm;flex-wrap:wrap;font-size:10pt">
+  <a href="portfolio-2026.pdf" style="background:#5d705e;color:#fff;padding:2mm 4mm;border-radius:2mm">下载作品集 PDF</a>
+  <a href="resume-product-assistant.pdf" style="background:#fff;border:1px solid #e2dbd1;padding:2mm 4mm;border-radius:2mm">简历 · AI产品助理</a>
+  <a href="resume-ad-ops.pdf" style="background:#fff;border:1px solid #e2dbd1;padding:2mm 4mm;border-radius:2mm">简历 · AI广告运营</a>
+  <a href="../" style="background:#fff;border:1px solid #e2dbd1;padding:2mm 4mm;border-radius:2mm">打开「绿仔的投资小屋」</a>
+</div>
+<style>@media print{.dlbar{display:none!important}} @media screen and (max-width:800px){.page{transform-origin:top left}}</style>
+
+
+<!-- ============ 1 COVER ============ -->
+
+
+<!-- ============ 1 COVER ============ -->
+<section class="page cover">
+  <div class="blob" style="width:150mm;height:150mm;right:-50mm;top:-45mm;background:#dfe5db"></div>
+  <div class="blob" style="width:90mm;height:90mm;right:30mm;top:70mm;background:#efdcd6;opacity:.8"></div>
+  <div class="blob" style="width:60mm;height:60mm;left:-18mm;top:150mm;background:#dde3ea;opacity:.9"></div>
+  <div class="inner">
+    <div class="kicker">AI Portfolio · 2026</div>
+    <h1>用 AI 把想法<br>做成上线的产品</h1>
+    <div class="role">刘嘉豪（Rein）· 2026 届 · 湖南财政经济学院 国际商务</div>
+    <div class="meta">
+      求职方向：AI 产品助理 ／ AI 广告运营 · 燕山AI 2026 校园招聘（长沙）<br>
+      手机 17718995693 ｜ 邮箱 2658656709@qq.com ｜ 湖南长沙
+    </div>
+    <div style="margin-top:9mm;display:flex;gap:5mm;align-items:center">
+      <img src="assets/icon-512.png" style="width:22mm;height:22mm;border-radius:5mm;box-shadow:0 4px 14px rgba(0,0,0,.08)">
+      <img src="assets/hk-logo.png" style="width:22mm;height:22mm;border-radius:5mm;box-shadow:0 4px 14px rgba(0,0,0,.08);background:#fff;object-fit:cover">
+      <div style="font-size:9.5pt;color:var(--muted);line-height:1.7">2 个已上线的 AI 辅助开发网页产品<br>+ 4 个早期 AI 原型与小工具</div>
+    </div>
+    <div style="position:absolute;right:22mm;top:118mm;width:54mm">
+      <img class="shot" src="assets/live-final-mobile-home.jpg" style="border-radius:6mm;border:2mm solid #fff;box-shadow:0 10px 30px rgba(60,50,40,.18)">
+    </div>
+    <div class="toc">
+      <div class="t"><div class="n">01</div><b>关于我</b><span>背景 · 能力 · 与 AI 协作的方式</span></div>
+      <div class="t"><div class="n">02</div><b>绿仔的投资小屋</b><span>美股中文 AI 日报 PWA · 主案例</span></div>
+      <div class="t"><div class="n">03</div><b>豪の小锅小灶</b><span>共享菜谱网页 · 权限与发布</span></div>
+      <div class="t"><div class="n">04</div><b>早期 AI 项目</b><span>小游戏 Agent · 内容工具 · 拆解</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 ABOUT ============ -->
+<section class="page">
+  <div class="ph"><div><div class="kicker">01 · About me</div><h2>关于我</h2></div><div class="sub">一个把 AI 当“执行团队”、自己当“产品负责人”的商科生</div></div>
+  <div style="display:grid;grid-template-columns:34mm 1fr;gap:6mm;align-items:start">
+    <img src="assets/photo.jpg" style="width:34mm;border-radius:3mm;border:1px solid var(--line)">
+    <div>
+      <p style="font-size:10.5pt">我叫刘嘉豪，湖南财政经济学院国际商务专业 2026 届毕业生。我不是计算机科班出身，但从 2023 年上半年开始深度使用大模型：先是问答，后来用 AI 写代码、生成素材，现在用 AI Agent 把一个想法从需求一路推到上线。</p>
+      <p style="font-size:10.5pt">我的做法是：<span class="hl">我负责定义问题、写清需求和验收标准、做设计取舍；AI 负责写代码和批量生产内容。</span>“绿仔的投资小屋”和“豪の小锅小灶”都是这样做出来、已经上线的产品。</p>
+      <div style="margin-top:2mm"><span class="tag">历史</span><span class="tag">汽车</span><span class="tag">金融 / 美股</span><span class="tag rose">休闲游戏（Steam 50+ 款深度体验）</span></div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:6mm">
+    <div class="card">
+      <h4>教育背景</h4>
+      <div style="display:flex;justify-content:space-between"><b>湖南财政经济学院 · 国际商务</b><span class="muted">2022.09 – 2026.06</span></div>
+      <p class="muted" style="margin-top:1mm">GPA 3.28/4.0（专业前 20%）· 英语四级 · 驾驶证 C1</p>
+      <ul>
+        <li>主修：组织行为学(90)、会计学(90)、区域经济学(94)、经济法律概论(91)</li>
+        <li>2024 年校级二等奖学金；首届全国大学生职业规范大赛校级金奖</li>
+        <li>2023 年暑期三下乡校级一等奖、优秀实践个人、全国七彩假期服务示范团队成员</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>实习经历</h4>
+      <div><b>小鹏汽车 宜家汇聚店 · 销售实习生</b></div><div class="muted" style="font-size:8.4pt">2026.05 – 2026.07</div>
+      <ul style="margin-top:1mm;font-size:8.6pt;line-height:1.5">
+        <li>熟悉汽车销售全流程，了解用户从接触到成交的购车决策过程</li>
+        <li>协助带教主管完成 15+ 单成交</li>
+        <li>月有效线上联系（微信、电话等）100+ 次；线下门店留资 200+ 条</li>
+        <li>实习期间所在销售小组连续 3 个月门店业绩排名第一</li>
+      </ul>
+      <h4 style="margin-top:2.5mm">我为什么适合 AI 产品 / 运营</h4>
+      <ul style="font-size:8.6pt;line-height:1.5">
+        <li>商科背景：关心用户、转化和生意本身，而不只是技术</li>
+        <li>做过 0→1：两个网页产品从想法到公网上线</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4mm">
+    <h4>AI 工具链</h4>
+    <table class="t">
+      <tr><th style="width:26mm">方向</th><th>工具与用法</th></tr>
+      <tr><td><b>Agent 系统</b></td><td>用 Cherry Studio 搭本地 Agent 工作台：持久记忆、多源搜索交叉验证、结构化输出；本地部署并调试 openclaw；用云端 AI Agent 完成“需求 → 代码 → 部署 → 每日自动更新”的完整链路</td></tr>
+      <tr><td><b>大模型协作</b></td><td>Claude / DeepSeek / Grok / Gemini / GPT 等多模型深度使用，熟悉各自的能力边界和适用场景</td></tr>
+      <tr><td><b>AI 辅助编程</b></td><td>Cursor / Claude：用自然语言指挥 AI 输出可用代码并调试验证；GitHub Pages / Vercel / Replit 部署；在 CodeCombat 上系统补编程基础</td></tr>
+      <tr><td><b>AIGC 素材</b></td><td>GPT-image2 / Midjourney / 即梦 / 通义万相：可批量生成统一风格的投放素材</td></tr>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:4mm;background:var(--sage-l);border-color:#d6ddd2">
+    <h4>我和 AI 协作的方式（在两个上线项目里实际用过）</h4>
+    <div class="grid3" style="gap:3mm;font-size:8.6pt">
+      <div><span class="step">1 定义问题</span><br>先说清“谁、在什么场景、遇到什么麻烦”，再动手</div>
+      <div><span class="step">2 需求 + 验收标准</span><br>把“要什么”写成能验证的条件，例如：所有涨跌幅都必须和真实收盘价一致</div>
+      <div><span class="step">3 出方案 → 我来选</span><br>让 AI 出多版设计（如 3 版字标）并排比较，由我拍板，再小步迭代</div>
+    </div>
+  </div>
+  <div class="foot"><span>刘嘉豪 · AI 作品集 2026</span><span>02</span></div>
+</section>
+
+<!-- ============ 3 INVEST: OVERVIEW ============ -->
+<section class="page">
+  <div class="ph"><div><div class="kicker">02 · Case study · 主案例</div><h2>绿仔的投资小屋</h2></div><div class="sub">美股每日中文 AI 简报 · 移动端 PWA · 已上线</div></div>
+  <div style="display:grid;grid-template-columns:1fr 58mm;gap:7mm">
+    <div>
+      <div class="quote serif">“美股的中文资讯太少了。我想打开手机，很快知道<b>我关注的股票今天为什么涨、为什么跌</b>。”</div>
+      <div style="margin-top:4mm">
+        <h4 style="font-size:11pt;margin-bottom:1.5mm">问题</h4>
+        <p>美股的一手信息（财经媒体、公司公告、分析师评级、散户论坛）几乎都是英文，而且很分散。中文投资者想弄清一只股票“为什么动”，要翻好几个网站，还常常看到没有数据支撑、只说“某股大涨”的二手消息。</p>
+        <h4 style="font-size:11pt;margin:3mm 0 1.5mm">目标用户</h4>
+        <p>关注美股的中文个人投资者（第一个用户就是我自己）：每天通勤或睡前有几分钟，想看结论、原因和不同观点，不想读长篇英文研报。</p>
+        <h4 style="font-size:11pt;margin:3mm 0 1.5mm">解决方案</h4>
+        <p>一个手机优先的 PWA：把约 100 只自选股每天变成一份中文 AI 简报。信息来自公开信源，<span class="hl">每一条涨跌说法都用真实行情数据核对</span>；再让价值、成长、技术、宏观四个流派的 AI 分析师“辩论”，最后给出共识结论。</p>
+        <h4 style="font-size:11pt;margin:3mm 0 1.5mm">我的角色：产品负责人（代码由 AI Agent 编写）</h4>
+        <ul>
+          <li>定义问题、用户和信息结构（首页结论 → 个股原因 → 机构观点 → 情绪 → 辩论）</li>
+          <li>定验收标准：涨跌幅必须与收盘价一致；不写持仓数量、成本和盈亏</li>
+          <li>推动 4 轮设计迭代，最终字标从 3 版方案里由我选定</li>
+          <li>把一次性报告改成每天自动更新的产品（两份日报定时发布）</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <img class="shot" src="assets/live-final-mobile-IREN.jpg" style="border-radius:5mm;border:1.5mm solid #fff">
+      <div class="cap">个股页：真实收盘价走势 + 新闻日期标注</div>
+      <div style="display:flex;gap:3mm;align-items:center;margin-top:5mm" class="card">
+        <img class="qr" src="assets/qr-invest.png">
+        <div style="font-size:8pt;line-height:1.5"><b>扫码体验</b><br><a href="https://jiah558.github.io/us-stock-ai-radar/">jiah558.github.io/<br>us-stock-ai-radar</a><br><span class="muted">可“添加到主屏幕”</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:5mm;background:var(--sage-l);border-color:#d6ddd2">
+    <h4>一次典型使用（早上 7 点后，通勤路上）</h4>
+    <div class="grid3" style="gap:3mm;font-size:8.6pt">
+      <div><span class="step">1 看结论</span><br>首页一句话大盘结论 + 7 只重点关注的涨跌和一句话原因</div>
+      <div><span class="step">2 查原因</span><br>点进异动个股：走势图上的新闻标记、机构观点、散户情绪</div>
+      <div><span class="step">3 听不同观点</span><br>看四个流派怎么吵，再看共识卡片；需要时分享给朋友</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3mm;margin-top:5mm">
+    <div class="stat"><div class="num">~100</div><div class="l">只自选股覆盖</div></div>
+    <div class="stat"><div class="num">7</div><div class="l">只重点关注深度解读</div></div>
+    <div class="stat"><div class="num">4</div><div class="l">大投资流派 AI 辩论</div></div>
+    <div class="stat"><div class="num">2</div><div class="l">份每日自动报告</div></div>
+    <div class="stat"><div class="num">4</div><div class="l">轮设计迭代</div></div>
+    <div class="stat"><div class="num">0</div><div class="l">第三方依赖 / CDN</div></div>
+  </div>
+  <p class="muted" style="font-size:7.6pt;margin-top:3mm">说明：页面内容由 AI 基于公开信息生成，不构成投资建议。作品集与网站均不展示任何持仓数量、成本、盈亏或券商信息。</p>
+  <div class="foot"><span>绿仔的投资小屋 · 概览</span><span>03</span></div>
+</section>
+
+<!-- ============ 4 INVEST: FEATURES ============ -->
+<section class="page">
+  <div class="ph"><div><div class="kicker">02 · Features</div><h2>核心功能</h2></div><div class="sub">真实截图 · 线上版本</div></div>
+  <div class="grid3" style="gap:5mm">
+    <div><img class="shot crop" src="assets/live-final-mobile-home.jpg"><div class="cap">首页：一句话大盘结论 + 涨跌/情绪“圆环”</div></div>
+    <div><img class="shot crop" src="assets/03-stock-IREN-debate.jpg"><div class="cap">四流派辩论：开场 → @反驳 → 共识</div></div>
+    <div><img class="shot crop" src="assets/live-final-mobile-dark.jpg"><div class="cap">深色模式：自动跟随系统</div></div>
+  </div>
+  <div class="grid3" style="margin-top:4mm;gap:3mm">
+    <div class="card sm"><h4>① 首页 · 30 秒看懂今天</h4>日期、一句话大盘结论、指数卡片、7 张“重点关注”卡片（价格、日/周涨跌、1 个月迷你走势、一句话原因）。</div>
+    <div class="card sm"><h4>② 个股详情 · 为什么涨跌</h4>用真实日收盘价画走势图（5 天 / 1 个月 / 3 个月），在关键新闻日期打编号标记，点击即可对照；下方是原因、机构观点、情绪条。</div>
+    <div class="card sm"><h4>③ AI 流派辩论 · 不止一种声音</h4>价值派、成长派、技术派、宏观派像群聊一样发言：开场一轮，再互相 @ 反驳，最后生成高亮的共识卡片，可分享、复制链接或存成图片。</div>
+    <div class="card sm"><h4>④ 自选速览 · 约 100 只一屏扫完</h4>今日大涨大跌及原因、本周涨跌、板块热力图，全部按涨跌幅绝对值排序；支持代码/名称搜索（键盘 / ↑↓ Enter）。</div>
+    <div class="card sm"><h4>⑤ 符合中文用户习惯</h4>红涨绿跌；不用 Google Fonts 等境外 CDN，国内打开快；可离线访问，支持“添加到主屏幕”。</div>
+    <div class="card sm"><h4>⑥ 可信与隐私</h4>“信息来源”页列出引用出处；每天发布前自动过滤措辞，一旦发现成本或盈亏类字段就中止发布。</div>
+  </div>
+  <div style="margin-top:4mm"><img class="shot" src="assets/live-final-desktop-home.jpg" style="aspect-ratio:1440/560;object-fit:cover;object-position:top"><div class="cap">桌面端三栏布局：列表 · 市场概况 · “AI 研究”面板</div></div>
+  <div class="foot"><span>绿仔的投资小屋 · 功能</span><span>04</span></div>
+</section>
+
+<!-- ============ 5 INVEST: PIPELINE ============ -->
+<section class="page">
+  <div class="ph"><div><div class="kicker">02 · Pipeline</div><h2>每天自动更新的数据流</h2></div><div class="sub">从公开信息到手机上的一份简报</div></div>
+  <div class="pipe">
+    <div class="st"><span class="i">1</span><b>公开信源</b>财经媒体<br>公司公告<br>分析师评级<br>StockTwits 情绪</div>
+    <div class="ar">→</div>
+    <div class="st"><span class="i">2</span><b>AI Agent 撰写</b>按固定栏目生成中文日报：大盘 / 重点关注 / 原因 / 机构观点 / 情绪 / 四派辩论 / 共识</div>
+    <div class="ar">→</div>
+    <div class="st rose"><span class="i">3</span><b>真实行情校验</b>抓取 Yahoo Finance 日线收盘价，用真实数据重算日/周涨跌幅</div>
+    <div class="ar">→</div>
+    <div class="st rose"><span class="i">4</span><b>结构化 + 隐私过滤</b>Markdown → JSON；新闻日期转成图表标记；出现成本/盈亏字段即中止</div>
+    <div class="ar">→</div>
+    <div class="st blue"><span class="i">5</span><b>自动发布</b>提交到 GitHub，Pages 自动部署；手机下次打开即是新报告</div>
+  </div>
+  <div class="grid2" style="margin-top:5mm">
+    <div class="card">
+      <h4>两份日报定时发布（北京时间）</h4>
+      <table class="t">
+        <tr><th>时间</th><th>内容</th></tr>
+        <tr><td><b>22:30</b></td><td>盘中快讯：开盘后的主要异动和原因</td></tr>
+        <tr><td><b>07:00</b></td><td>收盘报告：完整日报 + 四派辩论 + 下周关注</td></tr>
+      </table>
+      <p class="muted" style="margin-top:2mm;font-size:8pt">旧日期的报告保留在日期选择器里，可以回看。</p>
+    </div>
+    <div class="card">
+      <h4>我定下的三条“红线”</h4>
+      <ul>
+        <li><b>真实：</b>AI 写的每个涨跌幅都要和真实收盘价对得上，对不上就以真实数据为准</li>
+        <li><b>隐私：</b>只展示代码、价格、涨跌和分析；持仓数量、成本、盈亏一律不上网</li>
+        <li><b>合规：</b>明确标注“AI 生成、不构成投资建议”；图标全部手绘 SVG，不用第三方商标；字体使用 OFL 开源授权</li>
+      </ul>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5mm;margin-top:5mm">
+    <div><img class="shot" src="assets/14-consensus.jpg"><div class="cap">共识卡片：可分享 / 存图</div></div>
+    <div><img class="shot" src="assets/05-watchlist.jpg"><div class="cap">自选速览：大涨大跌与原因</div></div>
+    <div><img class="shot" src="assets/06-about.jpg"><div class="cap">“关于”页：写给招聘方的项目说明</div></div>
+  </div>
+  <div class="foot"><span>绿仔的投资小屋 · 流程</span><span>05</span></div>
+</section>
+
+<!-- ============ 6 INVEST: DESIGN ITERATION + LEARNINGS ============ -->
+<section class="page">
+  <div class="ph"><div><div class="kicker">02 · Design iterations</div><h2>设计迭代：4 轮，每轮一个决策</h2></div><div class="sub">v1 到定稿都保留在 Git 提交记录里</div></div>
+  <div class="iter">
+    <div class="v"><img class="shot" src="assets/it-v1-home.jpg"><span class="tag blue" style="margin-top:2mm">v1</span><b>先跑通：深色信息流</b>先做出每日数据管线和辩论界面，验证“这件事能每天做下去”。</div>
+    <div class="v"><img class="shot" src="assets/it-v2-home.jpg"><span class="tag blue" style="margin-top:2mm">v2</span><b>Google Finance 信息结构 × iOS Liquid Glass</b>借用用户熟悉的财经信息布局，加上毛玻璃导航、胶囊标签栏、深色模式和搜索。</div>
+    <div class="v"><img class="shot" src="assets/draft-a-mobile-home.jpg"><span class="tag blue" style="margin-top:2mm">v3</span><b>莫兰迪配色 + 改名</b>看盘本身容易焦虑，于是换成暖灰、灰粉、灰绿的柔和配色，产品改名为“绿仔的投资小屋”。</div>
+    <div class="v"><img class="shot" src="assets/live-final-mobile-home.jpg"><span class="tag blue" style="margin-top:2mm">v4</span><b>字标 3 选 1，定稿 B</b>出 3 版字标（A/B/C）并排对比，选定“小屋 + 叶子”，同步生成 PWA 图标和分享图。</div>
+  </div>
+  <div class="card" style="margin-top:5mm">
+    <h4>字标方案对比：让 AI 出 3 版，由我来选</h4>
+    <div class="grid3" style="gap:4mm;margin-top:2mm">
+      <div><img class="shot" src="assets/draft-a-mobile-home.jpg" style="aspect-ratio:1170/560;object-fit:cover;object-position:top"><div class="cap"><b>A</b> 书法 + 砖红印章「绿」：有个性，但略显严肃</div></div>
+      <div style="outline:2px solid var(--sage);outline-offset:1.5mm;border-radius:3mm;padding:0 1mm 1.5mm"><img class="shot" src="assets/draft-b-mobile-home.jpg" style="aspect-ratio:1170/560;object-fit:cover;object-position:top"><div class="cap"><b>B ✓ 选定</b> 圆润字体 + 小屋叶子：和“小屋”的名字最搭，亲切不焦虑</div></div>
+      <div><img class="shot" src="assets/draft-c-mobile-home.jpg" style="aspect-ratio:1170/560;object-fit:cover;object-position:top"><div class="cap"><b>C</b> 宋体杂志风 + 细线：显得专业，但偏冷</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:5mm;background:var(--sage-l);border-color:#d6ddd2">
+    <h4>我学到了什么</h4>
+    <div class="grid2" style="gap:2mm 6mm;font-size:8.8pt">
+      <div><b>1. 先保证“可信”，再追求“好看”。</b>AI 写的内容一定要有真实数据兜底，所以“行情校验”是第一个做进流程的环节。</div>
+      <div><b>2. 需求要写成能验收的样子。</b>比起“做得专业一点”，“所有涨跌幅与收盘价一致”这种说法，AI 能执行，我也能检查。</div>
+      <div><b>3. 设计就是做选择。</b>一次出 3 版并排比较，比一版一版地改更快，也更容易讲清楚为什么选它。</div>
+      <div><b>4. 能自动更新，才算产品。</b>一份报告做完就结束了；接上定时任务和自动发布之后，它才变成我每天真的会打开的工具。</div>
+    </div>
+  </div>
+  <div class="foot"><span>绿仔的投资小屋 · 迭代与复盘</span><span>06</span></div>
+</section>
+
+<!-- ============ 7 KITCHEN ============ -->
+<section class="page">
+  <div class="ph"><div><div class="kicker">03 · Project</div><h2>豪の小锅小灶</h2></div><div class="sub">共享菜谱网页 · 已上线（GitHub Pages）</div></div>
+  <div style="display:grid;grid-template-columns:1fr 50mm;gap:6mm">
+    <div>
+      <p style="font-size:10pt">一个以“我的菜谱”为核心的网页：收藏会做的菜，给美味程度打星，写下详细做法；周菜单和采购清单放在“更多”里。朋友打开链接就能看同一份菜谱，只有我（管理员）能修改和发布。</p>
+      <p class="muted" style="font-size:8.6pt">做这个的原因：<span class="pending">【待确认：做这个项目的初衷和使用场景，例如自己做饭记录 / 和朋友分享】</span></p>
+      <div class="grid2" style="gap:3mm;margin-top:2mm">
+        <div class="card"><h4>功能</h4><ul style="font-size:8.6pt">
+          <li>菜谱列表按美味指数排序，支持搜索和分类筛选</li>
+          <li>菜品详情：半星评分、分类、备注、食材、做法、要点</li>
+          <li>周菜单 + 采购清单</li>
+          <li>JSON 导出 / 导入备份</li></ul></div>
+        <div class="card"><h4>产品设计上的取舍</h4><ul style="font-size:8.6pt">
+          <li><b>两种模式：</b>本地打开时随意编辑、数据只存本机；线上打开时读取共享菜谱</li>
+          <li><b>权限：</b>访客只读，管理员输入密码后才能编辑</li>
+          <li><b>在网页里发布：</b>管理员一键把修改发布到线上，密钥只存在本机浏览器</li>
+          <li><b>防冲突：</b>发布时如果线上已被改过，先拉取最新版本合并再重试</li></ul></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:4mm">
+        <div class="stat"><div class="num">19</div><div class="l">道已收录菜品</div></div>
+        <div class="stat"><div class="num">4</div><div class="l">个分类（荤菜炒菜 11 道）</div></div>
+        <div class="stat"><div class="num">2</div><div class="l">种运行模式：本地 / 共享</div></div>
+      </div>
+      <p class="muted" style="font-size:8pt;margin-top:3mm">技术：纯静态 HTML/CSS/JS，无框架、无构建；数据存放在仓库的 menu.json；GitHub Actions 部署到 Pages。菜谱备注里注明了参考的博主来源。</p>
+    </div>
+    <div>
+      <img class="shot" src="assets/hk-mobile.jpg" style="border-radius:5mm;border:1.5mm solid #fff;aspect-ratio:780/1400;object-fit:cover;object-position:top">
+      <div class="cap">线上首页（手机）</div>
+      <div style="display:flex;gap:3mm;align-items:center;margin-top:4mm" class="card">
+        <img class="qr" src="assets/qr-kitchen.png">
+        <div style="font-size:8pt;line-height:1.5"><b>扫码访问</b><br><a href="https://jiah558.github.io/hao-kitchen/">jiah558.github.io/<br>hao-kitchen</a></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:40mm 1fr;gap:5mm;margin-top:4mm;align-items:start">
+    <div><img class="shot" src="assets/hk-detail.jpg" style="aspect-ratio:780/1000;object-fit:cover;object-position:top"><div class="cap">菜品详情：评分 + 做法</div></div>
+    <div><img class="shot" src="assets/hk-desktop.jpg" style="aspect-ratio:1280/560;object-fit:cover;object-position:top"><div class="cap">桌面端：按分类分组、星级一目了然</div>
+      <div class="card" style="margin-top:3mm"><h4>这个项目教会我的</h4><span style="font-size:8.8pt">小工具也要考虑“谁能看、谁能改、改冲突了怎么办”。先把访客只读、管理员可写的权限边界定清楚，后面的发布和冲突处理就有了依据。</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>豪の小锅小灶</span><span>07</span></div>
+</section>
+
+<!-- ============ 8 EARLIER PROJECTS ============ -->
+<section class="page">
+  <div class="ph"><div><div class="kicker">04 · Earlier work · 2026 上半年</div><h2>早期 AI 项目</h2></div><div class="sub">从一次性原型，到能上线的小产品</div></div>
+  <div class="card" style="display:grid;grid-template-columns:1fr 62mm;gap:5mm">
+    <div>
+      <h4>AI Mini-Game Agent：一句话生成可玩的小游戏 <span class="tag">已上线</span></h4>
+      <p>用户输入一句描述 → Agent 自动判断属于哪类模板 → 生成一个完整可玩的小游戏。支持 Flappy Bird（轻量反应）、Dodge Runner（跑酷躲避）、Match-3（消除）3 种模板，并附上微信小游戏的部署步骤。</p>
+      <p class="muted" style="font-size:8.4pt">起因：和一家游戏公司的 HR 聊完后，自己边学边做出来，代码放在 GitHub。技术：Vercel 部署 · Agent 编排 · Prompt Engineering</p>
+      <div style="display:flex;gap:3mm;align-items:center"><img class="qr" src="assets/qr-minigame.png" style="width:18mm;height:18mm"><a style="font-size:8.4pt" href="https://ai-mini-game-agent.vercel.app">ai-mini-game-agent.vercel.app</a></div>
+    </div>
+    <div style="display:grid;grid-template-columns:20mm 1fr;gap:2mm;align-items:start"><img class="shot" src="assets/old-minigame-phone.jpg" style="aspect-ratio:1264/2300;object-fit:cover;object-position:top"><img class="shot" src="assets/old-minigame-ui.jpg"></div>
+  </div>
+  <div class="grid2" style="margin-top:4mm">
+    <div class="card"><h4>「抽个下午」：自媒体节目 AI 定制工具</h4>
+      <p style="font-size:8.8pt">和朋友一起做自媒体节目时，结合栏目内容用 Agent 深度定制的小工具，用 Replit 做成可运行的程序，把 AI 放进内容策划流程。</p>
+      <img class="shot" src="assets/old-chouge.jpg" style="aspect-ratio:2553/880;object-fit:cover;object-position:top"></div>
+    <div class="card"><h4>AIGC Prompt Generator：一键生成专业提示词 <span class="tag rose">原型</span></h4>
+      <p style="font-size:8.8pt">把“写好提示词”这件事做成工具：选场景、选模型，自动生成结构化提示词。在招聘会现场有感而发做的原型，目前还没做完。</p>
+      <img class="shot" src="assets/old-prompt.jpg" style="aspect-ratio:2553/880;object-fit:cover;object-position:top"></div>
+  </div>
+  <div class="grid2" style="margin-top:4mm">
+    <div class="card"><h4>超级跳跳鱼：网页小游戏（Replit）</h4><p style="font-size:8.8pt;margin:0">从零做出一个可玩的小游戏，第一次完整跑通“AI 辅助编程 → 调试 → 发布”。</p></div>
+    <div class="card"><h4>产品拆解练习：休闲游戏的共同设计要素</h4><p style="font-size:8.8pt;margin:0">把 PowerWash Simulator、Unpacking、WarioWare、Candy Crush 和国内解压类小游戏放在一起，归纳出“触觉模拟 + 过程奖励”“合集玩法用新鲜感对抗腻”等共同机制。</p></div>
+  </div>
+  <div class="card" style="margin-top:4mm;background:var(--sand);border-color:#ddd4c8">
+    <h4>持续学习</h4>
+    <span style="font-size:8.8pt">自 2023 年上半年起持续跟进各代大模型和 AI Agent，模型订阅和 API 调用都是自费；借助 AI 研读《工程控制论》《通信的数学理论》《为什么》《深度学习》《强化学习》《设计数据密集型应用》等理工科经典，补上系统思维和 AI 理论的底子。</span>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4mm;padding:3mm 5mm;border-radius:3.5mm;background:var(--ink);color:#f4f0ea">
+    <div><div style="font-size:12pt;font-weight:700" class="serif">谢谢阅读 · 期待在燕山AI 和大家一起做产品</div><div style="font-size:8.4pt;opacity:.8;margin-top:1mm">刘嘉豪 ｜ 17718995693 ｜ 2658656709@qq.com</div></div>
+    <img class="qr" src="assets/qr-invest.png" style="width:20mm;height:20mm">
+  </div>
+  <div class="foot"><span>早期项目</span><span>08</span></div>
+</section>
+</body>
+</html>
