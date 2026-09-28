@@ -285,15 +285,20 @@ def convert(md, date, prices, wl_rows):
                 st["notes"] += [plain(c) for c in it["children"]]
                 if k.startswith("底层资产"):
                     evtext += v + "。"
-        # prices
+        # prices (Yahoo for close/day/chart; prefer Markdown 本周 when present —
+        # report quote note defines the week baseline, e.g. Mon session vs prior Friday)
         q = prices.get(tk)
+        o = one.get(tk, {})
         if q and q["series"]:
             last, day, week = moves(q["series"], date)
+            if o.get("week_md") is not None:
+                week = o["week_md"]
+            if o.get("day_md") is not None:
+                day = o["day_md"]
             st.update(price=r2(last), day=r2(day), week=r2(week))
             st["chart"] = [[d, round(c, 4)] for d, c in q["series"][-CHART_DAYS:]]
             st["hist"] = [[d, round(c, 4)] for d, c in q["series"][-HIST_DAYS:]]
         else:
-            o = one.get(tk, {})
             st.update(price=o.get("price_md"), day=o.get("day_md"), week=o.get("week_md"), chart=[])
         evs = find_events(evtext, rd)
         first = st["chart"][0][0] if st["chart"] else date
