@@ -70,7 +70,7 @@ def one(args):
             b = {"sess": sess.isoformat(), "wk": None, "mo": None, "ytd": None, "spark": None}
         elif not b or b.get("sess") != sess.isoformat():
             d = get(sym, {"range": "1y", "interval": "1d"})
-            hist = [(et_date(t), c) for t, c in zip(d.get("timestamp", []), d["indicators"]["quote"][0]["close"]) if c is not None]
+            hist = [(et_date(t), c) for t, c in zip(d.get("timestamp") or [], ((d.get("indicators") or {}).get("quote") or [{}])[0].get("close") or []) if c is not None]
             hist = [(dd, c) for dd, c in hist if dd < sess]
             monday = sess - dt.timedelta(days=sess.weekday())
 
@@ -86,7 +86,7 @@ def one(args):
          "chg": pct(price, prev), "wk": pct(price, b["wk"]), "mo": pct(price, b["mo"]), "ytd": pct(price, b["ytd"]), "t": rt, "base": b}
     # extended hours: newest 5-min bar after the regular close (post) or before the open (pre)
     ts = m.get("timestamp") or []
-    cl = m["indicators"]["quote"][0]["close"]
+    cl = ((m.get("indicators") or {}).get("quote") or [{}])[0].get("close") or []
     for t, c in zip(reversed(ts), reversed(cl)):
         if c is None:
             continue
