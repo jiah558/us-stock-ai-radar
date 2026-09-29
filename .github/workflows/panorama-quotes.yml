@@ -1,0 +1,53 @@
+name: panorama-quotes
+# Refreshes the quotes shown on /panorama/ (Yahoo Finance chart API, same source as tools/fetch_prices.py).
+#  - every 5 min during US market hours (13:00-21:59 UTC covers 9:00-17:59 EDT / 8:00-16:59 EST; the script itself decides
+#    whether the market is actually open and skips otherwise), every 30 min otherwise (script skips unless data is stale).
+#  - result goes to the force-pushed orphan branch `quotes-data` (single commit, no history noise on main, no Pages rebuild).
+#  - main gets a data/quotes.json snapshot commit only when the market is closed (~1 commit per trading day, after the 20:00 ET extended-hours end) or on manual run;
+#    the page reads the fresher quotes-data copy (raw.githubusercontent, CORS *) and falls back to the same-origin Pages copy.
+on:
+  schedule:
+    - cron: '*/5 13-21 * * 1-5'
+    - cron: '17,47 * * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Ignore market-hours gating and always fetch'
+        type: boolean
+        default: true
+permissions:
+  contents: write
+concurrency:
+  group: panorama-quotes
+  cancel-in-progress: false
+jobs:
+  quotes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore newest published quotes (for freshness gating)
+        run: |
+          git fetch --depth=1 origin quotes-data 2>/dev/null && git show FETCH_HEAD:quotes.json > data/quotes.json || echo "no quotes-data branch yet"
+      - name: Fetch quotes
+        id: fetch
+        run: |
+          before=$(md5sum data/quotes.json 2>/dev/null | cut -d' ' -f1 || true)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then python3 tools/fetch_quotes.py; else python3 tools/fetch_quotes.py --auto; fi
+          after=$(md5sum data/quotes.json | cut -d' ' -f1)
+          [ "$before" != "$after" ] && echo "changed=true" >> "$GITHUB_OUTPUT" || echo "changed=false" >> "$GITHUB_OUTPUT"
+          echo "state=$(python3 -c "import json;print(json.load(open('data/quotes.json')).get('state',''))")" >> "$GITHUB_OUTPUT"
+      - name: Publish to quotes-data branch (fast path, every run)
+        if: steps.fetch.outputs.changed == 'true'
+        run: |
+          d=$(mktemp -d); cp data/quotes.json "$d/quotes.json"; cd "$d"
+          git init -q -b quotes-data
+          git config user.name "panorama-bot"; git config user.email "panorama-bot@users.noreply.github.com"
+          git add quotes.json; git commit -q -m "quotes $(date -u +%FT%TZ)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" quotes-data
+      - name: Commit closing snapshot to main (Pages fallback copy; ~1 commit per trading day)
+        if: steps.fetch.outputs.changed == 'true' && (steps.fetch.outputs.state == 'closed' || github.event_name == 'workflow_dispatch')
+        run: |
+          git config user.name "panorama-bot"; git config user.email "panorama-bot@users.noreply.github.com"
+          git add data/quotes.json
+          git diff --cached --quiet || { git commit -q -m "quotes: snapshot"; git pull -q --rebase origin main; git push origin HEAD:main; }

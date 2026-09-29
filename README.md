@@ -31,6 +31,8 @@ Desktop (1440): ![](screenshots/d1-home.png)
   Fonts come from [google/fonts](https://github.com/google/fonts) `ofl/`, are licensed under **SIL Open Font License 1.1** (see `assets/fonts/OFL-*.txt`), and are subset with `pyftsubset` to just these 7 characters as woff2 (1–4 KB each). Previews: `screenshots/wordmark-{a,b,c}.png`, `screenshots/draft-{a,b,c}-mobile-home.png`.
 - **Privacy**: only tickers, prices, moves and analysis are shown. No position size, cost or P&L. The converter normalizes wording to "重点关注", applies optional private scrub rules from a git-ignored `tools/scrub_local.json`, and aborts if cost/P&L-like fields show up.
 
+- **持仓全景图 (`/panorama/`)**: Treemap of the 7 focus holdings (area = position weight, placeholder equal weights until replaced), market trend card, sector ETF diverging bars, market-session indicator; quotes refreshed by a GitHub Actions cron (see `panorama/README.md`).
+
 ## Structure
 ```
 index.html  manifest.webmanifest  sw.js  .nojekyll
@@ -42,6 +44,7 @@ data/prices/YYYY-MM-DD.json          # raw Yahoo closes (build input, git-ignore
 tools/fetch_prices.py                # Yahoo chart API → data/prices/<date>.json (real prices only)
 tools/md2json.py                     # report Markdown + prices → data/reports/<date>.json, updates index.json
 tools/daily_update.sh                # fetch + convert (+ --push)
+panorama/  data/panorama-weights.json  data/quotes.json  tools/fetch_quotes.py  .github/workflows/panorama-quotes.yml   # 持仓全景图, see panorama/README.md
 tools/screenshots.py                 # local server + headless Chrome screenshots (390×844 light/dark, 1440×900)
 ```
 

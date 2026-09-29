@@ -30,6 +30,7 @@ const I = {
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
   list: '<path d="M4 6.5h16M4 12h16M4 17.5h10"/>',
+  pano: '<rect x="3.5" y="3.5" width="9" height="17" rx="2"/><rect x="14.5" y="3.5" width="6" height="7.5" rx="2"/><rect x="14.5" y="13" width="6" height="7.5" rx="2"/>',
   grid: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',
   link: '<path d="M14 4h6v6M20 4l-8.5 8.5"/><path d="M18 14v4.5a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 014 18.5v-11A1.5 1.5 0 015.5 6H10"/>',
   trend: '<path d="M3 17.5l5.5-5.5 4 4L21 7.5"/><path d="M15.5 7.5H21V13"/><path d="M3 21h18" opacity=".45"/>',
@@ -237,7 +238,7 @@ function appbar(ctx, back, navTitle = '') {
     <div class="ab-r"><button class="ib sbtn press" type="button" aria-label="搜索">${svg('search')}</button>${dsel}<a class="ib hide-m press" href="#/about" aria-label="关于" title="关于项目">${svg('info')}</a></div>
   </div></header>`;
 }
-const TABS = [['#/', '首页'], ['#/w', '自选'], ['#/about', '关于'], ['#/sources', '来源']];
+const TABS = [['#/', '首页'], ['#/w', '自选'], ['panorama/', '持仓全景'], ['#/about', '关于'], ['#/sources', '来源']];
 const tabs = active => `<nav class="tabs" aria-label="页面">${TABS.map(([h, n]) => `<a href="${h}" class="${active === h ? 'on' : ''}" ${active === h ? 'aria-current="page"' : ''}>${n}</a>`).join('')}</nav>`;
 function leftHTML(rep, cur) {
   if (!rep) return '';
@@ -252,7 +253,7 @@ function leftHTML(rep, cur) {
       ${ix.map(x => row(x.name, x.symbol.replace('^', ''), x.symbol === '^TNX' ? x.price.toFixed(2) + '%' : fmtPx(x.price), x.day, '#/', '', false)).join('')}</section>`;
 }
 const disclaimer = rep => `<footer class="foot"><p><b>免责声明</b>：本站内容由 AI 基于公开信息自动整理与生成，包括“流派辩论”在内的观点均为 AI 模拟，可能存在错误或遗漏；<b>不构成任何投资建议</b>。投资有风险，决策请独立判断。${rep ? `行情来源：Yahoo Finance 日线收盘；数据截至美东 ${rep.date} 收盘。颜色约定：红涨绿跌。` : ''}</p><div class="fl">© ${new Date().getFullYear()} Rein · ${APP}<span>·</span><a href="#/about">关于</a><span>·</span><a href="#/sources">信息来源</a></div></footer>`;
-const TABBAR = [['#/', 'home', '首页'], ['#/w', 'grid', '自选'], ['#/about', 'info', '关于'], ['#/sources', 'doc', '来源']];
+const TABBAR = [['#/', 'home', '首页'], ['#/w', 'grid', '自选'], ['panorama/', 'pano', '全景'], ['#/about', 'info', '关于'], ['#/sources', 'doc', '来源']];
 const tabbar = active => `<nav class="tabbar glass" aria-label="主导航">${TABBAR.map(([h, k, n]) => `<a href="${h}" class="press${active === h ? ' on' : ''}" ${active === h ? 'aria-current="page"' : ''}>${svg(k)}<span>${n}</span></a>`).join('')}</nav>`;
 function page(ctx, { tab, back, cur, center, right = '', rightMobile = false, after = '', title = '', sub = '', navTitle = '' }) {
   const lt = title ? `<div class="lt-block"><h1 class="ltitle">${title}</h1>${sub ? `<p class="lt-sub">${sub}</p>` : ''}${searchBox(true)}</div>` : '';

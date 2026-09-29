@@ -1,0 +1,14 @@
+{
+  "placeholder": true,
+  "showWeights": true,
+  "note": "示例占比：以下为等权占位数据，并非真实持仓比例。替换方法见 panorama/README.md。只写占比，不要写股数、成本或盈亏。",
+  "weights": {
+    "IREN": 1,
+    "SPCX": 1,
+    "NBIS": 1,
+    "MU": 1,
+    "LUNL": 1,
+    "RKLX": 1,
+    "RKLB": 1
+  }
+}

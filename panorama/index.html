@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>持仓全景图 · 绿仔的投资小屋</title>
+<meta name="description" content="重点关注标的的市场趋势、持仓地图与板块涨跌全景。行情来自 Yahoo Finance，自动刷新。">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3efe9">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1a18">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="持仓全景">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/app.css">
+<link rel="stylesheet" href="panorama.css">
+</head>
+<body class="pn">
+<header class="pn-bar glass">
+  <div class="pn-bar-in">
+    <a class="pn-brand press" href="../" aria-label="返回首页">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H4.5M11 5l-7 7 7 7"/></svg>
+      <span class="pn-brand-t">投资小屋</span>
+    </a>
+    <h1 class="pn-title">持仓全景图</h1>
+    <div class="pn-bar-r"><span class="pn-status" id="status" aria-live="polite"><i></i><b>—</b></span></div>
+  </div>
+</header>
+
+<nav class="tabs pn-tabs" aria-label="页面">
+  <a href="../#/">首页</a><a href="../#/w">自选</a><a href="./" class="on" aria-current="page">持仓全景</a><a href="../#/about">关于</a><a href="../#/sources">来源</a>
+</nav>
+
+<main class="pn-main" id="main">
+  <div class="pn-sub"><span id="clock">美东 —</span><span class="pn-dot">·</span><span id="dtime">数据时间 —</span><button class="pn-refresh press" id="refresh" type="button" aria-label="立即刷新"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 108.5-8.5A9 9 0 005.7 6.3L3.5 8.5"/><path d="M3.5 3.5v5h5"/></svg></button></div>
+  <div class="pn-warn" id="warn" hidden></div>
+
+  <section class="pn-cards" id="cards" aria-label="概览"></section>
+
+  <div class="pn-grid">
+    <aside class="pn-card pn-market" aria-labelledby="h-market">
+      <div class="pn-hd"><h2 id="h-market">市场趋势</h2><span class="pn-hint">指数</span></div>
+      <div id="market"></div>
+    </aside>
+
+    <section class="pn-card pn-map" aria-labelledby="h-map">
+      <div class="pn-hd">
+        <h2 id="h-map">持仓地图</h2>
+        <span class="pn-badge" id="badge" hidden title="占比为占位示例数据，并非真实持仓比例">示例占比</span>
+        <label class="pn-sw press"><input type="checkbox" id="wtoggle" checked><span class="pn-sw-t">显示占比</span><span class="pn-sw-k" aria-hidden="true"></span></label>
+      </div>
+      <div class="pn-treemap" id="treemap" role="list" aria-label="持仓地图：面积代表占比，颜色代表当日涨跌"></div>
+      <div class="pn-legend"><span>面积＝<em id="areaNote">占比</em></span><span class="pn-scale" aria-hidden="true"><i class="dn3"></i><i class="dn1"></i><i class="fl"></i><i class="up1"></i><i class="up3"></i></span><span>红涨绿跌</span></div>
+      <div class="pn-table" id="holdlist"></div>
+    </section>
+
+    <aside class="pn-card pn-sectors" aria-labelledby="h-sec">
+      <div class="pn-hd"><h2 id="h-sec">板块涨跌</h2><span class="pn-hint">ETF 当日</span></div>
+      <div id="sectors"></div>
+    </aside>
+  </div>
+
+  <footer class="pn-foot">
+    <p id="footTime">—</p>
+    <p><b>说明</b>：行情来自 Yahoo Finance 公开接口，可能有延迟或缺失，仅供参考，<b>不构成投资建议</b>。<span id="wnote">持仓占比仅以百分比示意；</span>页面不展示股数、成本或盈亏。每 60 秒自动刷新；后台任务盘中约每 5 分钟更新一次数据。</p>
+  </footer>
+</main>
+
+<nav class="tabbar glass" aria-label="主导航">
+  <a href="../#/" class="press"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 01-1.5 1.5H15V15h-6v5.5H5.5A1.5 1.5 0 014 19z"/></svg><span>首页</span></a>
+  <a href="../#/w" class="press"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span>自选</span></a>
+  <a href="./" class="press on" aria-current="page"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="9" height="17" rx="2"/><rect x="14.5" y="3.5" width="6" height="7.5" rx="2"/><rect x="14.5" y="13" width="6" height="7.5" rx="2"/></svg><span>全景</span></a>
+  <a href="../#/about" class="press"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.6v.2"/></svg><span>关于</span></a>
+  <a href="../#/sources" class="press"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2.5H6.5a2 2 0 00-2 2v15a2 2 0 002 2h11a2 2 0 002-2V8z"/><path d="M14 2.5V8h5.5M8.5 13h7M8.5 17h4.5"/></svg><span>来源</span></a>
+</nav>
+<noscript><p style="padding:24px;color:#8a8078">请启用 JavaScript 以查看持仓全景图。</p></noscript>
+<script src="panorama.js" defer></script>
+</body>
+</html>
