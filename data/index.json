@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-09-29",
+   "headline": "**太空分化、新云小反弹、杠杆工具重挫**——SPCX 随 Starship Flight 14 入轨叙事与 BofA/TD Cowen 看多回升约 **+2.",
+   "file": "data/reports/2026-09-29.json"
+  },
+  {
    "date": "2026-09-28",
    "headline": "利率与油价压制下，**新云/算力与太空杠杆股普跌**——IREN 受 Jones Trading 首次覆盖 Hold 拖累跌超 5%；SPCX 虽完成 Star",
    "file": "data/reports/2026-09-28.json"
@@ -11,6 +16,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-09-28",
- "updatedAt": "2026-09-28T23:14:13+00:00"
+ "latest": "2026-09-29",
+ "updatedAt": "2026-09-29T23:10:44+00:00"
 }
