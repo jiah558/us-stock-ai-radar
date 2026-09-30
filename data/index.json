@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-09-30",
+   "headline": "**季末分化——SPCX 续强、美光盘中横盘静待盘后财报、太空杠杆继续承压**。SPCX **+1.1%**（Macquarie 维持 Outperform/$",
+   "file": "data/reports/2026-09-30.json"
+  },
+  {
    "date": "2026-09-29",
    "headline": "**太空分化、新云小反弹、杠杆工具重挫**——SPCX 随 Starship Flight 14 入轨叙事与 BofA/TD Cowen 看多回升约 **+2.",
    "file": "data/reports/2026-09-29.json"
@@ -16,6 +21,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-09-29",
- "updatedAt": "2026-09-29T23:10:44+00:00"
+ "latest": "2026-09-30",
+ "updatedAt": "2026-09-30T23:11:47+00:00"
 }
