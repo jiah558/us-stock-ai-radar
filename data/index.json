@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-10-01",
+   "headline": "**MU 财报次日收复早盘失地领涨；RKLB 双催化收涨但幅度收敛；NBIS 收购利好仍收跌；SPCX 发射日冲高回落；太空杠杆继续分化**。MU **+3.0",
+   "file": "data/reports/2026-10-01.json"
+  },
+  {
    "date": "2026-09-30",
    "headline": "**季末分化——SPCX 续强、美光盘中横盘静待盘后财报、太空杠杆继续承压**。SPCX **+1.1%**（Macquarie 维持 Outperform/$",
    "file": "data/reports/2026-09-30.json"
@@ -21,6 +26,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-09-30",
- "updatedAt": "2026-09-30T23:11:47+00:00"
+ "latest": "2026-10-01",
+ "updatedAt": "2026-10-01T23:17:37+00:00"
 }
