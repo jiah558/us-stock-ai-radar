@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-10-02",
+   "headline": "**太空与新云普涨、MU 独跌**——SPCX **+7.4%**（马斯克谈 Nvidia VR72≈250kW + AI 算力叙事）；RKLX **+9.6%",
+   "file": "data/reports/2026-10-02.json"
+  },
+  {
    "date": "2026-10-01",
    "headline": "**MU 财报次日收复早盘失地领涨；RKLB 双催化收涨但幅度收敛；NBIS 收购利好仍收跌；SPCX 发射日冲高回落；太空杠杆继续分化**。MU **+3.0",
    "file": "data/reports/2026-10-01.json"
@@ -26,6 +31,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-10-01",
- "updatedAt": "2026-10-01T23:17:37+00:00"
+ "latest": "2026-10-02",
+ "updatedAt": "2026-10-02T23:13:04+00:00"
 }
