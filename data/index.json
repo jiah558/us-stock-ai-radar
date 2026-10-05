@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-10-05",
+   "headline": "**SPCX 独强、其余重点关注普跌**——SPCX **+7.6%**，收于 6 月以来最高（摩根士丹利重申增持/$300 + Starship 天然气管道 ",
+   "file": "data/reports/2026-10-05.json"
+  },
+  {
    "date": "2026-10-02",
    "headline": "**太空与新云普涨、MU 独跌**——SPCX **+7.4%**（马斯克谈 Nvidia VR72≈250kW + AI 算力叙事）；RKLX **+9.6%",
    "file": "data/reports/2026-10-02.json"
@@ -31,6 +36,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-10-02",
- "updatedAt": "2026-10-02T23:13:04+00:00"
+ "latest": "2026-10-05",
+ "updatedAt": "2026-10-05T23:13:40+00:00"
 }
