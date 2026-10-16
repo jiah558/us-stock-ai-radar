@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-10-16",
+   "headline": "**新云与 Rocket Lab 杠杆端再遭重创，SPCX 相对抗跌**——NBIS **-12.18%**、IREN **-11.19%**、RKLX **-",
+   "file": "data/reports/2026-10-16.json"
+  },
+  {
    "date": "2026-10-15",
    "headline": "**LUNL / MU / NBIS / IREN 收复盘中全部或大部分跌幅，SPCX 小跌，Rocket Lab 两只继续重挫**——LUNL **+10.6",
    "file": "data/reports/2026-10-15.json"
@@ -76,6 +81,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-10-15",
- "updatedAt": "2026-10-15T23:14:09+00:00"
+ "latest": "2026-10-16",
+ "updatedAt": "2026-10-16T23:11:09+00:00"
 }
