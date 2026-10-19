@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FOCUS = ["IREN", "SPCX", "NBIS", "MU", "LUNL", "RKLX", "RKLB"]
 INDICES = ["^GSPC", "^IXIC", "^DJI", "^VIX", "^TNX", "^SOX"]
-ALIAS = {".SPX": "^GSPC", "BRK.B": "BRK-B"}  # broker ticker -> Yahoo symbol
+ALIAS = {".SPX": "^GSPC", "BRK.B": "BRK-B", "SATS": "ECHO"}  # broker ticker -> Yahoo symbol
 
 
 def yahoo(sym, rng="3mo"):
@@ -30,12 +30,19 @@ def yahoo(sym, rng="3mo"):
             time.sleep(1.5)
     else:
         return sym, {"err": str(err)}
-    meta = j["meta"]
+    meta = j.get("meta") or {}
     off = meta.get("gmtoffset", -14400)
-    closes = j["indicators"]["quote"][0]["close"]
+    ind = (j.get("indicators") or {})
+    quote = (ind.get("quote") or [{}])[0] or {}
+    closes = quote.get("close")
+    if closes is None:
+        adj = (ind.get("adjclose") or [{}])[0] or {}
+        closes = adj.get("adjclose")
+    if closes is None:
+        return sym, {"err": "no close series in yahoo payload"}
     series = [
         [dt.datetime.fromtimestamp(t + off, dt.timezone.utc).date().isoformat(), round(c, 4)]
-        for t, c in zip(j.get("timestamp", []), closes) if c is not None
+        for t, c in zip(j.get("timestamp") or [], closes) if c is not None
     ]
     return sym, {"name": meta.get("longName") or meta.get("shortName"), "series": series}
 

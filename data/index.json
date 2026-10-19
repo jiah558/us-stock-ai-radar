@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-10-19",
+   "headline": "**新云与存储小幅收复、太空杠杆分化**——MU **+2.97%**、NBIS **+2.88%**、IREN **+2.74%**、RKLX **+2.18",
+   "file": "data/reports/2026-10-19.json"
+  },
+  {
    "date": "2026-10-16",
    "headline": "**新云与 Rocket Lab 杠杆端再遭重创，SPCX 相对抗跌**——NBIS **-12.18%**、IREN **-11.19%**、RKLX **-",
    "file": "data/reports/2026-10-16.json"
@@ -81,6 +86,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-10-16",
- "updatedAt": "2026-10-16T23:11:09+00:00"
+ "latest": "2026-10-19",
+ "updatedAt": "2026-10-19T23:13:30+00:00"
 }
