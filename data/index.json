@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-10-27",
+   "headline": "**七只全线收涨**——LUNL **+21.69%**、RKLX **+16.77%**、NBIS **+11.22%**、LUNR（LUNL 底层）+10.",
+   "file": "data/reports/2026-10-27.json"
+  },
+  {
    "date": "2026-10-26",
    "headline": "**七只分化**——RKLX **+4.55%**、MU **+2.98%**、RKLB **+2.32%**、IREN **+2.11%**（新云盘中回升）、",
    "file": "data/reports/2026-10-26.json"
@@ -111,6 +116,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-10-26",
- "updatedAt": "2026-10-26T23:13:36+00:00"
+ "latest": "2026-10-27",
+ "updatedAt": "2026-10-27T23:05:21+00:00"
 }
