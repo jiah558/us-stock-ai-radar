@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-11-03",
+   "headline": "**七只重点关注全线收涨**——LUNL **+12.50%**、IREN **+11.08%**、RKLX **+9.62%**、NBIS **+7.25%*",
+   "file": "data/reports/2026-11-03.json"
+  },
+  {
    "date": "2026-11-02",
    "headline": "**除 SPCX 外重点关注全线收跌**——LUNL **-14.54%**、RKLX **-9.80%**、NBIS **-8.27%**、IREN **-8",
    "file": "data/reports/2026-11-02.json"
@@ -136,6 +141,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-11-02",
- "updatedAt": "2026-11-02T23:15:57+00:00"
+ "latest": "2026-11-03",
+ "updatedAt": "2026-11-03T23:14:00+00:00"
 }
