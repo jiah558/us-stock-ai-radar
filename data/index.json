@@ -1,6 +1,11 @@
 {
  "reports": [
   {
+   "date": "2026-11-10",
+   "headline": "**三涨四跌**——RKLX **+12.71%**、RKLB **+6.54%**、SPCX **+0.72%**；IREN **−7.85%**、NBIS ",
+   "file": "data/reports/2026-11-10.json"
+  },
+  {
    "date": "2026-11-09",
    "headline": "**六涨一跌**——LUNL **+30.00%**、RKLX **+21.73%**、RKLB **+10.91%**、NBIS **+9.24%**、MU ",
    "file": "data/reports/2026-11-09.json"
@@ -161,6 +166,6 @@
    "file": "data/reports/2026-09-25.json"
   }
  ],
- "latest": "2026-11-09",
- "updatedAt": "2026-11-09T23:08:41+00:00"
+ "latest": "2026-11-10",
+ "updatedAt": "2026-11-10T23:13:10+00:00"
 }
