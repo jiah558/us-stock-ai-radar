@@ -243,7 +243,7 @@ const tabs = active => `<nav class="tabs" aria-label="页面">${TABS.map(([h, n]
 function leftHTML(rep, cur) {
   if (!rep) return '';
   const row = (t, n, p, d, href, sp, on) => `<a class="lrow${on ? ' on' : ''}" href="${href}"><div class="lt"><b>${esc(t)}</b><span>${esc(n)}</span></div>${sp ? `<div class="lsp">${sp}</div>` : '<div class="lsp"></div>'}<div class="lp"><b class="num">${p}</b>${chgArrow(d)}</div></a>`;
-  const ix = rep.market.indices;
+  const ix = [...(rep.market.indices || [])].sort((a, b) => Number(isVix(b)) - Number(isVix(a)));
   return `<div class="lhd"><h2>列表</h2></div>
     <section class="lsec"><div class="lsh"><h3>重点关注</h3><span class="faint">${rep.focus.length} 只</span></div>
       ${rep.focus.map(s => row(s.ticker, s.underlying ? `2 倍做多 ${s.underlying}` : s.name, fmtPx(s.price), s.day, `#/s/${s.ticker}`, spark(s.chart, { w: 44, h: 20, base: false, fill: false }), s.ticker === cur)).join('')}</section>
@@ -347,8 +347,35 @@ function wireResearch() {
 }
 
 /* ---------- pages ---------- */
+function isVix(x) { return x && (x.symbol === '^VIX' || /^VIX/.test(x.name || '')); }
+function findVix(rep) { return (rep.market.indices || []).find(isVix); }
+function vixLevel(v) {
+  if (v == null || Number.isNaN(Number(v))) return null;
+  if (v < 12) return { key: 'calm', label: '极度平静', hint: '波动预期很低，市场情绪偏松' };
+  if (v < 20) return { key: 'normal', label: '相对平静', hint: '波动处于常态区间' };
+  if (v < 30) return { key: 'elevated', label: '偏紧张', hint: '恐慌升温，波动预期偏高' };
+  if (v < 40) return { key: 'fear', label: '恐慌', hint: '避险情绪明显，波动预期较高' };
+  return { key: 'extreme', label: '极度恐慌', hint: '市场恐慌情绪很强' };
+}
+function vixCard(rep) {
+  const x = findVix(rep);
+  if (!x) return '';
+  const lv = vixLevel(x.price);
+  const pc = prevClose(x.chart), ab = pc != null ? x.price - pc : null;
+  const pct = Math.max(0, Math.min(100, ((x.price - 10) / 40) * 100));
+  return `<section class="vix card" data-lv="${lv.key}" aria-label="VIX 恐慌指数 ${fmtPx(x.price)}，${lv.label}">
+    <div class="vix-main"><div class="vix-k">VIX 恐慌指数</div>
+      <div class="vix-n"><span class="big num">${fmtPx(x.price)}</span>${pill(x.day, true)}</div>
+      ${ab != null ? `<div class="vix-abs num">${fmtAbs(ab)}</div>` : ''}</div>
+    <div class="vix-meter" aria-hidden="true"><div class="vix-track"><i style="left:${pct.toFixed(1)}%"></i></div>
+      <div class="vix-scale"><span>平静</span><span>紧张</span><span>恐慌</span></div></div>
+    <div class="vix-lv"><b>${lv.label}</b><span>${lv.hint}</span></div>
+    <div class="vix-sp">${spark(x.chart, { w: 128, h: 48 })}</div>
+  </section>`;
+}
 function indexCards(rep) {
-  return `<div class="icards-wrap"><div class="icards">${rep.market.indices.map(x => {
+  const list = (rep.market.indices || []).filter(x => !isVix(x));
+  return `<div class="icards-wrap"><div class="icards">${list.map(x => {
     const pc = prevClose(x.chart), ab = pc != null ? x.price - pc : null, tnx = x.symbol === '^TNX';
     return `<div class="icard"><div class="in">${esc(x.name)}</div><div class="iv num">${tnx ? x.price.toFixed(2) + '%' : fmtPx(x.price)}</div><div class="ia num">${ab != null ? `(${fmtAbs(ab)})` : '&nbsp;'}</div><div class="ip">${chgArrow(x.day)}</div><div class="isp">${spark(x.chart)}</div></div>`; }).join('')}</div>
     <button class="ib icnext" type="button" aria-label="向右滚动">${svg('right')}</button></div>`;
@@ -409,6 +436,7 @@ async function pageHome() {
   const nxt = rep.nextWeek.map(e => { const mm = e.match(/^\*\*(.+?)\*\*\s*(.*)$/); return mm ? { d: mm[1], t: mm[2] } : { d: '', t: e }; });
   const center = `
     <div class="dateline sd-only"><span class="live">${svg('spark')}AI 日报</span><span>美东 ${p.m}月${p.d}日 ${p.wd} 收盘</span><span class="dot-sep"></span><span>北京时间 ${bj.m}/${bj.d} ${bj.wd}</span></div>
+    ${vixCard(rep)}
     <div class="hero-grid">
       <section class="hero card"><div class="hero-k">今日 · 重点关注</div>
         <div class="hero-n"><span class="big num">${rep.focus.length}</span><span class="unit">只</span><span class="split"><span><em class="num up">${nUp}</em>涨</span><i></i><span><em class="num dn">${nDn}</em>跌</span></span></div>
@@ -557,7 +585,7 @@ function pageQuote(ctx, tk) {
 }
 
 const heatBg = v => { const a = Math.min(1, Math.abs(v || 0) / 5);
-  if (!v) return DARK.matches ? ['#2f2b28', '#cfc7be'] : ['#efebe5', '#5b534c'];
+  if (!v) return DARK.matches ? ['#242c32', '#c5d0d2'] : ['#eef1f2', '#445456'];
   const mix = (c1, c2, t) => '#' + [0, 2, 4].map(i => Math.round(parseInt(c1.substr(i + 1, 2), 16) * (1 - t) + parseInt(c2.substr(i + 1, 2), 16) * t).toString(16).padStart(2, '0')).join('');
   if (DARK.matches) return v > 0 ? [mix('#2e2523', '#a8625b', .15 + a * .75), a > .5 ? '#f6e9e6' : '#e0aaa2'] : [mix('#232824', '#5f7e67', .15 + a * .75), a > .5 ? '#e8f0ea' : '#a9c4b0'];
   return v > 0 ? [mix('#f5ebe8', '#b86a61', a * .85), a > .55 ? '#fbf6f4' : '#9a4f48'] : [mix('#ebf0ea', '#6f8f77', a * .85), a > .55 ? '#f6f9f6' : '#4f6d57']; };
@@ -636,21 +664,21 @@ async function shareConsensus(s, rep) {
 function consensusPNG(s, rep) {
   const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
   const FONT = '-apple-system,"SF Pro Display","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#8a9aa6'); bg.addColorStop(.55, '#a89aa6'); bg.addColorStop(1, '#c4a99c');
+  const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#5b8a7a'); bg.addColorStop(.55, '#3d8f86'); bg.addColorStop(1, '#4a7e8a');
   g.fillStyle = bg; g.fillRect(0, 0, W, H);
   const rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
-  g.fillStyle = 'rgba(251,249,246,.97)'; rr(72, 150, W - 144, H - 300, 56); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.97)'; rr(72, 150, W - 144, H - 300, 56); g.fill();
   g.fillStyle = '#fff'; g.font = `600 40px ${FONT}`; g.fillText(APP, 80, 100);
   g.font = `400 32px ${FONT}`; g.textAlign = 'right'; g.fillText('美东 ' + rep.date, W - 80, 100); g.textAlign = 'left';
-  g.fillStyle = '#2f2b27'; g.font = `500 84px ${FONT}`; g.fillText(s.ticker, 136, 290);
-  g.fillStyle = '#8a8078'; g.font = `400 38px ${FONT}`; g.fillText('四大流派共识结论', 136, 356);
-  const cols = ['#b08a4f', '#957aa0', '#6a939a', '#7a7fa6'], names = ['价值', '成长', '技术', '宏观'];
-  cols.forEach((col, i) => { g.fillStyle = col; g.beginPath(); g.arc(160 + i * 150, 430, 18, 0, 7); g.fill(); g.fillStyle = '#4d4640'; g.font = `400 30px ${FONT}`; g.fillText(names[i], 186 + i * 150, 441); });
-  g.fillStyle = '#2f2b27'; g.font = `400 42px ${FONT}`;
+  g.fillStyle = '#1e2a2c'; g.font = `500 84px ${FONT}`; g.fillText(s.ticker, 136, 290);
+  g.fillStyle = '#6e7e80'; g.font = `400 38px ${FONT}`; g.fillText('四大流派共识结论', 136, 356);
+  const cols = ['#7a8a4a', '#8f7599', '#3d8f86', '#6a7a99'], names = ['价值', '成长', '技术', '宏观'];
+  cols.forEach((col, i) => { g.fillStyle = col; g.beginPath(); g.arc(160 + i * 150, 430, 18, 0, 7); g.fill(); g.fillStyle = '#445456'; g.font = `400 30px ${FONT}`; g.fillText(names[i], 186 + i * 150, 441); });
+  g.fillStyle = '#1e2a2c'; g.font = `400 42px ${FONT}`;
   let line = '', y = 540; const maxW = W - 272;
   for (const ch of plain(s.debate.consensus)) { if (g.measureText(line + ch).width > maxW) { g.fillText(line, 136, y); line = ''; y += 72; if (y > H - 260) break; } line += ch; }
   if (line && y <= H - 260) g.fillText(line, 136, y);
-  g.fillStyle = '#9a9088'; g.font = `400 30px ${FONT}`; g.fillText('AI 基于公开信息模拟 · 不构成投资建议', 136, H - 200);
+  g.fillStyle = '#8a989a'; g.font = `400 30px ${FONT}`; g.fillText('AI 基于公开信息模拟 · 不构成投资建议', 136, H - 200);
   g.fillStyle = 'rgba(255,255,255,.9)'; g.font = `400 30px ${FONT}`; g.textAlign = 'center'; g.fillText(location.host + location.pathname, W / 2, H - 70);
   c.toBlob(async blob => {
     const file = new File([blob], `${s.ticker}-consensus-${rep.date}.png`, { type: 'image/png' });
