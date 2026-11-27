@@ -242,15 +242,12 @@ const TABS = [['#/', '首页'], ['#/w', '自选'], ['panorama/', '持仓全景']
 const tabs = active => `<nav class="tabs" aria-label="页面">${TABS.map(([h, n]) => `<a href="${h}" class="${active === h ? 'on' : ''}" ${active === h ? 'aria-current="page"' : ''}>${n}</a>`).join('')}</nav>`;
 function leftHTML(rep, cur) {
   if (!rep) return '';
-  const row = (t, n, p, d, href, sp, on) => `<a class="lrow${on ? ' on' : ''}" href="${href}"><div class="lt"><b>${esc(t)}</b><span>${esc(n)}</span></div>${sp ? `<div class="lsp">${sp}</div>` : '<div class="lsp"></div>'}<div class="lp"><b class="num">${p}</b>${chgArrow(d)}</div></a>`;
-  const ix = [...(rep.market.indices || [])].sort((a, b) => Number(isVix(b)) - Number(isVix(a)));
+  const wrow = w => `<a class="lrow${w.ticker === cur ? ' on' : ''}" href="#/s/${esc(w.ticker)}"><div class="lt"><b>${esc(w.ticker)}</b><span>${esc(w.name)}</span></div><div class="lp"><b class="num">${fmtPx(w.price)}</b>${chgArrow(w.day)}</div></a>`;
   return `<div class="lhd"><h2>列表</h2></div>
-    <section class="lsec"><div class="lsh"><h3>重点关注</h3><span class="faint">${rep.focus.length} 只</span></div>
-      ${rep.focus.map(s => row(s.ticker, s.underlying ? `2 倍做多 ${s.underlying}` : s.name, fmtPx(s.price), s.day, `#/s/${s.ticker}`, spark(s.chart, { w: 44, h: 20, base: false, fill: false }), s.ticker === cur)).join('')}</section>
+    ${holdingsBoard(rep, { cur, compact: true })}
+    ${marketBoard(rep, { compact: true })}
     <section class="lsec"><div class="lsh"><h3>自选异动</h3><a class="more" href="#/w">全部 ${rep.watch.all.length}</a></div>
-      ${rep.watch.all.slice(0, 8).map(w => row(w.ticker, w.name, fmtPx(w.price), w.day, `#/s/${w.ticker}`, '', w.ticker === cur)).join('')}</section>
-    <section class="lsec"><div class="lsh"><h3>指数</h3></div>
-      ${ix.map(x => row(x.name, x.symbol.replace('^', ''), x.symbol === '^TNX' ? x.price.toFixed(2) + '%' : fmtPx(x.price), x.day, '#/', '', false)).join('')}</section>`;
+      ${rep.watch.all.slice(0, 8).map(wrow).join('')}</section>`;
 }
 const disclaimer = rep => `<footer class="foot"><p><b>免责声明</b>：本站内容由 AI 基于公开信息自动整理与生成，包括“流派辩论”在内的观点均为 AI 模拟，可能存在错误或遗漏；<b>不构成任何投资建议</b>。投资有风险，决策请独立判断。${rep ? `行情来源：Yahoo Finance 日线收盘；数据截至美东 ${rep.date} 收盘。颜色约定：红涨绿跌。` : ''}</p><div class="fl">© ${new Date().getFullYear()} Rein · ${APP}<span>·</span><a href="#/about">关于</a><span>·</span><a href="#/sources">信息来源</a></div></footer>`;
 const TABBAR = [['#/', 'home', '首页'], ['#/w', 'grid', '自选'], ['panorama/', 'pano', '全景'], ['#/about', 'info', '关于'], ['#/sources', 'doc', '来源']];
@@ -357,6 +354,177 @@ function vixLevel(v) {
   if (v < 40) return { key: 'fear', label: '恐慌', hint: '避险情绪明显，波动预期较高' };
   return { key: 'extreme', label: '极度恐慌', hint: '市场恐慌情绪很强' };
 }
+
+const INDUSTRIES = [
+  { id: 'neocloud', title: 'AI 算力 / 新云', tickers: ['IREN', 'NBIS'] },
+  { id: 'memory', title: '存储 / 半导体', tickers: ['MU'] },
+  { id: 'space', title: '航天 / 太空', tickers: ['SPCX', 'RKLB', 'RKLX', 'LUNL'] },
+];
+const HOLDING_TK = new Set(['IREN', 'SPCX', 'NBIS', 'MU', 'LUNL', 'LUNR', 'RKLX', 'RKLB']);
+function shortName(s) {
+  if (!s) return '';
+  if (s.underlying) return '2× ' + s.underlying;
+  const n = String(s.name || '');
+  if (/^Nebius/i.test(n)) return 'Nebius';
+  if (/^IREN Ltd/i.test(n)) return 'IREN Limited';
+  return n.replace(/\s*[（(].*$/, '').trim() || n;
+}
+function todayISO() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+}
+function stockHref(tk, focus) {
+  if (!tk) return '';
+  if (tk === 'LUNR' && (focus || []).some(s => s.ticker === 'LUNL')) return '#/s/LUNL';
+  return '#/s/' + tk;
+}
+function quoteRow({ title, sub, price, day, chart, href, on, tnx, compact }) {
+  const px = tnx ? Number(price).toFixed(2) + '%' : fmtPx(price);
+  const sp = spark(chart, { w: compact ? 48 : 80, h: compact ? 22 : 32, base: false, fill: false });
+  const inner = `<div class="ar-l"><b>${esc(title)}</b><span>${esc(sub || '')}</span></div>
+    <div class="ar-sp">${sp}</div>
+    <div class="ar-r"><b class="num">${px}</b>${pill(day)}</div>`;
+  const cls = `arow${on ? ' on' : ''}`;
+  return href ? `<a class="${cls}" href="${href}">${inner}</a>` : `<div class="${cls} static">${inner}</div>`;
+}
+function holdingsBoard(rep, { cur, compact } = {}) {
+  const rows = (rep.focus || []).map(s => quoteRow({
+    title: s.ticker, sub: shortName(s), price: s.price, day: s.day, chart: s.chart,
+    href: `#/s/${s.ticker}`, on: s.ticker === cur, compact,
+  })).join('');
+  return `<section class="alist${compact ? ' compact' : ''}"><div class="al-h"><h3>持仓</h3><span class="faint">${rep.focus.length} 只</span></div>${rows}</section>`;
+}
+function marketBoard(rep, { compact } = {}) {
+  const ix = [...(rep.market.indices || [])].sort((a, b) => Number(isVix(b)) - Number(isVix(a)));
+  const rows = ix.map(x => {
+    const lv = isVix(x) ? vixLevel(x.price) : null;
+    return quoteRow({
+      title: isVix(x) ? 'VIX' : x.name,
+      sub: isVix(x) ? ('恐慌指数' + (lv ? ' · ' + lv.label : '')) : x.symbol.replace('^', ''),
+      price: x.price, day: x.day, chart: x.chart, href: '', tnx: x.symbol === '^TNX', compact,
+    });
+  }).join('');
+  return `<section class="alist${compact ? ' compact' : ''}"><div class="al-h"><h3>市场</h3><span class="faint">VIX 与主要指数</span></div>${rows}</section>`;
+}
+function fallbackIndustries(rep) {
+  return INDUSTRIES.map(g => {
+    const stocks = (rep.focus || []).filter(s => g.tickers.includes(s.ticker));
+    const points = stocks.map(s => {
+      const move = `${s.ticker} 收 ${fmtPx(s.price)}（${fmtPct(s.day)}）`;
+      return s.oneLiner ? `${move}。${s.oneLiner}` : move;
+    });
+    return points.length ? { ...g, points } : null;
+  }).filter(Boolean);
+}
+function indexBackdrop(rep) {
+  if (rep.market && rep.market.backdrop) return rep.market.backdrop;
+  const want = ['^GSPC', '^IXIC', '^DJI', '^VIX'];
+  const ix = (rep.market.indices || []).filter(x => want.includes(x.symbol) || isVix(x));
+  ix.sort((a, b) => want.indexOf(isVix(a) ? '^VIX' : a.symbol) - want.indexOf(isVix(b) ? '^VIX' : b.symbol));
+  if (!ix.length) return '';
+  return '指数参考：' + ix.map(x => `${x.name} ${x.symbol === '^TNX' ? x.price.toFixed(2) + '%' : fmtPx(x.price)}（${fmtPct(x.day)}）`).join('，') + '。';
+}
+function industryHTML(rep) {
+  const groups = (rep.market && Array.isArray(rep.market.industries) && rep.market.industries.length)
+    ? rep.market.industries : fallbackIndustries(rep);
+  if (!groups.length) return '';
+  const cards = groups.map(g => {
+    const tks = (g.tickers || []).map(t => `<a class="ig-tk" href="#/s/${esc(t)}">${esc(t)}</a>`).join('');
+    const paras = (g.points || []).map(p => `<p>${md(p)}</p>`).join('');
+    return `<article class="ig"><header class="ig-h"><h3>${esc(g.title)}</h3><div class="ig-tks">${tks}</div></header><div class="ig-b">${paras}</div></article>`;
+  }).join('');
+  const bg = indexBackdrop(rep);
+  return `<section class="sec indus"><div class="shr"><h2 class="sh">市场概况</h2><span class="faint small">聚焦持仓所在行业</span></div>
+    <div class="ig-list">${cards}</div>
+    ${bg ? `<p class="ig-bg">${md(bg)}</p>` : ''}</section>`;
+}
+function parseNwItem(e) {
+  const mm = String(e).match(/^\*\*(.+?)\*\*\s*(.*)$/);
+  return mm ? { d: mm[1], t: mm[2] } : { d: '', t: String(e || '') };
+}
+function parseLooseDate(label, year) {
+  const s = String(label || '');
+  const ymd = s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (ymd) return `${ymd[1]}-${ymd[2].padStart(2, '0')}-${ymd[3].padStart(2, '0')}`;
+  const cnY = s.match(/(\d{4})\s*年\s*(\d{1,2})\s*月/);
+  if (cnY) return `${cnY[1]}-${cnY[2].padStart(2, '0')}-01`;
+  const md = s.match(/(\d{1,2})\/(\d{1,2})/);
+  if (md) return `${year}-${md[1].padStart(2, '0')}-${md[2].padStart(2, '0')}`;
+  return '';
+}
+function eventTickers(text, focus) {
+  const set = new Set(), blob = String(text);
+  const alias = { '美光': 'MU', 'SpaceX': 'SPCX', 'Rocket Lab': 'RKLB', 'Nebius': 'NBIS' };
+  HOLDING_TK.forEach(t => { if (new RegExp('\\b' + t + '\\b').test(blob)) set.add(t === 'LUNR' ? 'LUNL' : t); });
+  Object.entries(alias).forEach(([k, v]) => { if (blob.includes(k)) set.add(v); });
+  (focus || []).forEach(s => { if (s.name && blob.includes(s.name)) set.add(s.ticker); });
+  if (/Electron/i.test(blob)) set.add('RKLB');
+  if (/Starship/i.test(blob) || (/解禁/.test(blob) && /SPCX|SpaceX|180/.test(blob))) set.add('SPCX');
+  return [...set];
+}
+function agendaItems(rep) {
+  const year = (rep.date || '2026').slice(0, 4);
+  const isLatest = state.index && state.index.latest === rep.date;
+  const cutoff = isLatest ? todayISO() : rep.date;
+  const seen = new Set();
+  const out = [];
+  const push = e => {
+    if (!e) return;
+    if (e.date && e.date < cutoff) return;
+    if (e.date && dayDiff(cutoff, e.date) > 50) return;
+    const key = [e.date, (e.tickers || []).slice().sort().join(','), e.kind || '', e.background ? '1' : '0'].join('|');
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(e);
+  };
+  const structured = Array.isArray(rep.nextWeekHoldings) && rep.nextWeekHoldings.length;
+  if (structured) {
+    rep.nextWeekHoldings.forEach(e => push({
+      date: e.date || '', tickers: e.tickers || [], background: !!e.background,
+      kind: e.kind || (e.background ? '背景' : ''), title: e.title || e.label || '', text: e.text || '',
+    }));
+  } else {
+    (rep.nextWeek || []).forEach(raw => {
+      const { d, t } = parseNwItem(raw);
+      const blob = `${d} ${t}`;
+      if (/已发生/.test(blob) || /持续跟踪/.test(d) && !t.trim()) return;
+      const date = parseLooseDate(d, year) || parseLooseDate(t, year);
+      const tickers = eventTickers(blob, rep.focus);
+      const background = /FOMC|议息/.test(blob) && tickers.length === 0;
+      if (!tickers.length && !background) return;
+      let kind = background ? '背景' : (/财报/.test(blob) ? '财报' : (/解禁/.test(blob) ? '解禁' : (/发射|试飞|Electron|Starship/.test(blob) ? '发射' : '事项')));
+      push({ date, tickers, background, kind, title: d, text: t });
+    });
+  }
+  if (!structured) {
+    (rep.focus || []).forEach(s => (s.upcoming || []).forEach(u => {
+      if (u && u.date) push({ date: u.date, tickers: [s.ticker], background: false, kind: /财报/.test(u.label || '') ? '财报' : '事项', title: u.label || '', text: u.label || '' });
+    }));
+  }
+  out.sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999') || Number(a.background) - Number(b.background));
+  return out;
+}
+function agendaHTML(rep) {
+  const items = agendaItems(rep);
+  const body = items.length
+    ? `<div class="agenda">${items.map(e => {
+        const href = e.tickers && e.tickers[0] ? stockHref(e.tickers[0], rep.focus) : '';
+        const dateLab = e.date
+          ? `<b>${shortD(e.date)}</b><span>${e.date === todayISO() ? '今日' : dparts(e.date).wd}</span>`
+          : `<b>—</b>`;
+        const tks = (e.tickers || []).map(t => tkBadge(t, true)).join('');
+        const kind = e.kind ? `<span class="ag-k">${esc(e.kind)}</span>` : '';
+        const titleIsDate = e.title && /^约?\s*\d{1,2}\/\d{1,2}/.test(plain(e.title));
+        const title = e.title && !titleIsDate ? `<span class="ag-t">${md2(e.title)}</span>` : '';
+        const text = e.text && e.text !== e.title ? `<p>${md(e.text)}</p>` : (!title && e.text ? `<p>${md(e.text)}</p>` : '');
+        const inner = `<div class="ag-d">${dateLab}</div><div class="ag-b"><div class="ag-m">${tks}${kind}${title}</div>${text}</div>`;
+        return href
+          ? `<a class="ag-row${e.background ? ' bg' : ''}" href="${href}">${inner}</a>`
+          : `<div class="ag-row${e.background ? ' bg' : ''}">${inner}</div>`;
+      }).join('')}</div>`
+    : `<p class="ag-empty">这份日报里，持仓股票暂无尚未到期的财报或已核实的大动作。</p>`;
+  return `<section class="sec"><div class="shr"><h2 class="sh">下周关注</h2><span class="faint small">持仓财报与大动作</span></div>${body}</section>`;
+}
+
 function vixCard(rep) {
   const x = findVix(rep);
   if (!x) return '';
@@ -422,38 +590,21 @@ async function pageHome() {
   const idx = await loadIndex(), rep = await loadReport(), ctx = { idx, rep };
   const p = dparts(rep.date), bj = dparts(bjDate(rep.date)), m = rep.market;
   const hm = m.headline.match(/^(.+?)(——|；|。)([\s\S]*)$/);
-  const hTitle = hm ? hm[1] : m.headline, hRest = hm ? (hm[2] === '——' ? hm[3] : hm[3]) : '';
-  const nSrc = rep.sources.reduce((a, s) => a + s.urls.length, 0) || rep.sources.length;
-  const nUp = rep.focus.filter(s => s.day > 0).length, nDn = rep.focus.filter(s => s.day < 0).length;
-  const top = [...rep.focus].sort((a, b) => Math.abs(b.day || 0) - Math.abs(a.day || 0))[0];
-  const acc = [accItem(md2(hTitle), `${hRest ? `<p>${md(hRest)}</p>` : ''}<p>${md(m.overview)}</p>`, { open: true, ai: true, srcs: nSrc,
-      extra: `<a class="tonal" href="#/s/${esc(top.ticker)}/debate">${sparkSearch}借助 AI 流派辩论深入了解</a>` })]
-    .concat(rep.watch.weekly.map(w => { const t = [...w.matchAll(/\*\*(.+?)\*\*/g)].map(x => x[1]).join(' · ') || plain(w).slice(0, 30); return accItem(md(' ' + t), `<p>${md(w)}</p>`); }))
-    .concat(rep.watch.anomalies ? [accItem('数据提示：过期代码与低流动性报价', `<p>${md(rep.watch.anomalies)}</p>`)] : []);
+  const hTitle = hm ? hm[1] : m.headline;
   const seen = new Set(), evs = [];
   rep.focus.forEach(s => { if (s.eventsFrom) return; (s.events || []).forEach(e => { const k = e.label; if (seen.has(k)) return; seen.add(k); evs.push({ ...e, tk: s.ticker, href: `#/s/${s.ticker}` }); }); });
   evs.sort((a, b) => b.date.localeCompare(a.date));
-  const nxt = rep.nextWeek.map(e => { const mm = e.match(/^\*\*(.+?)\*\*\s*(.*)$/); return mm ? { d: mm[1], t: mm[2] } : { d: '', t: e }; });
   const center = `
     <div class="dateline sd-only"><span class="live">${svg('spark')}AI 日报</span><span>美东 ${p.m}月${p.d}日 ${p.wd} 收盘</span><span class="dot-sep"></span><span>北京时间 ${bj.m}/${bj.d} ${bj.wd}</span></div>
-    ${vixCard(rep)}
-    <div class="hero-grid">
-      <section class="hero card"><div class="hero-k">今日 · 重点关注</div>
-        <div class="hero-n"><span class="big num">${rep.focus.length}</span><span class="unit">只</span><span class="split"><span><em class="num up">${nUp}</em>涨</span><i></i><span><em class="num dn">${nDn}</em>跌</span></span></div>
-        <p class="hero-p">${md2(hTitle)}</p><span class="live">${svg('spark')}AI 日报</span></section>
-      ${ringsCard(rep)}
-    </div>
-    ${indexCards(rep)}
-    <section class="sec"><h2 class="sh">美国市场概况</h2><div class="accs">${acc.join('')}</div></section>
+    <p class="take">${md2(hTitle)}</p>
+    <div class="only-nl"><div class="board card">${holdingsBoard(rep)}${marketBoard(rep)}</div></div>
+    ${industryHTML(rep)}
+    ${agendaHTML(rep)}
     <section class="sec only-m">${researchHTML(rep, 'inline')}</section>
-    <section class="sec"><div class="shr"><h2 class="sh">重点关注</h2><span class="faint small">${rep.focus.length} 只 · 点开看 AI 辩论</span></div>${focusRows(rep)}</section>
     ${evs.length ? `<section class="sec"><div class="shr"><h2 class="sh">最新动态</h2><span class="badge-live">AI 摘要</span></div>${newsList(rep, evs, { limit: 5 })}</section>` : ''}
-    ${nxt.length ? `<section class="sec"><h2 class="sh">下周关注</h2><div class="cal">${nxt.map(e => `<div class="ce"><span class="cd">${svg('cal')}</span><div><b>${md2(e.d)}</b><p>${md(e.t)}</p></div></div>`).join('')}</div></section>` : ''}
-    <section class="sec"><div class="shr"><h2 class="sh">自选异动</h2><a class="more" href="#/w">全部 ${rep.watch.all.length} 只 ${svg('right')}</a></div><div class="wlist">${rep.watch.all.slice(0, 5).map(x => wlRow(x, false)).join('')}</div></section>`;
+    <section class="sec"><div class="shr"><h2 class="sh">自选异动</h2><a class="more" href="#/w">全部 ${rep.watch.all.length} 只 ${svg('right')}</a></div><div class="wlist">${rep.watch.all.slice(0, 5).map(x => wlRow(x, false)).join('')}</div></section>
+    ${ringsCard(rep)}`;
   app.innerHTML = page(ctx, { tab: '#/', center, right: researchHTML(rep, 'panel'), title: wordmark('wm-lg'), navTitle: wordmark('wm-sm'), sub: `美东 ${p.m}月${p.d}日 ${p.wd}收盘 · 北京时间 ${bj.m}/${bj.d} ${bj.wd}` });
-  const ic = $('.icards'), nb = $('.icnext');
-  const upd = () => nb.classList.toggle('show', ic.scrollWidth - ic.clientWidth - ic.scrollLeft > 8);
-  ic.addEventListener('scroll', upd, { passive: true }); upd(); nb.addEventListener('click', () => ic.scrollBy({ left: 320, behavior: 'smooth' }));
   wireMore(); wireResearch(); wirePrompt(rep);
 }
 

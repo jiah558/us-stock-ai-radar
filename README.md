@@ -13,10 +13,10 @@ A mobile-first PWA that explains, in Simplified Chinese, **why US stocks moved t
 Desktop (1440): ![](screenshots/d1-home.png)
 
 ## Features
-- **Design**: Google-Finance-style information architecture (desktop 3 columns: list · market overview · "AI 研究" panel; index cards with sparklines; accordion market summary; 最新动态 feed; quote page with range tabs, crosshair chart and key stats) rendered in iOS-style "Liquid Glass" materials: frosted sticky nav bar, floating capsule tab bar on mobile, large titles that collapse into the nav bar, a cool-mist palette (background #f4f6f7, white cards, muted-teal accent #3d8f86 aligned with 体能小屋 / 小锅小灶, dusty-rose up / teal down), editorial typography with light numerals, spring press/page motion, a featured VIX fear-index band on the home page, and automatic cool-charcoal dark mode. Signature "activity rings" card (涨势 / 跌势 / 散户情绪), iMessage-style debate bubbles, and a shareable consensus card (Web Share / copy link / save as PNG). No third-party logos or trademarks; all icons are hand-drawn inline SVG.
+- **Design**: Google-Finance-style information architecture (desktop 3 columns: holdings/market list · industry overview · "AI 研究" panel; 最新动态 feed; quote page with range tabs, crosshair chart and key stats) rendered in iOS-style "Liquid Glass" materials: frosted sticky nav bar, floating capsule tab bar on mobile, large titles that collapse into the nav bar, a cool-mist palette (background #f4f6f7, white cards, muted-teal accent #3d8f86 aligned with 体能小屋 / 小锅小灶, dusty-rose up / teal down), editorial typography with light numerals, spring press/page motion, and automatic cool-charcoal dark mode. Signature "activity rings" card (涨势 / 跌势 / 散户情绪), iMessage-style debate bubbles, and a shareable consensus card (Web Share / copy link / save as PNG). No third-party logos or trademarks; all icons are hand-drawn inline SVG.
 - **Search**: client-side ticker/name search over focus + watchlist stocks (keyboard: `/`, ↑↓, Enter). A watchlist-only ticker opens a lightweight quote page.
 - **Gestures**: swipe right from the left edge on detail pages to go back.
-- **首页 (home)**: date, one-line market takeaway, index chips, and 7 "重点关注" cards (price, day %, week %, 1-month sparkline, one-line reason).
+- **首页 (home)**: Apple Stocks-style lists come first — a **持仓** section with each of the 7 focus names on its own row (ticker + short name, sparkline, last price, rounded red/green change pill), then a **市场** section with VIX and the major indices in the same row layout. VIX is no longer a hero band above the holdings. **市场概况** is grouped into short industry cards for the holdings' sectors (AI 算力 / 新云: IREN、NBIS; 存储 / 半导体: MU; 航天 / 太空: SPCX、RKLB、RKLX、LUNL), not a single wall of text. **下周关注** lists only holdings earnings and confirmed large events (plus FOMC as a one-line background when it matters), as date + name + event rows.
 - **个股详情 (stock detail)**: price and moves, a real daily-close chart (5天 / 1个月 / 3个月 tabs; 1天 intraday is not collected) with numbered markers for key news dates (tap to scrub), reasons, analyst views, a sentiment bar, and an animated **chat-style debate** (opening round → rebuttal round with @mentions → highlighted consensus card, plus a replay button).
 - **自选速览 (watchlist)**: today's big movers with reasons, weekly movers, a sector heat map, and the full list sorted by absolute move.
 - **关于 (about)**: problem, solution, pipeline, and design choices, written for recruiters.
@@ -49,7 +49,13 @@ tools/screenshots.py                 # local server + headless Chrome screenshot
 ```
 
 ## Daily update (how the automation plugs in)
-The daily agent already writes `report-YYYY-MM-DD.md` in the same format as `report-2026-09-25.md`, with these sections: 大盘概况 / focus-stock table + per-stock `### N. TICKER（名称）｜…` blocks with 主要原因 / 机构观点 / 市场情绪 / 流派辩论 (价值派/成长派/技术派/宏观派/反驳/**共识结论**) / 自选股速览 / 下周关注 / 信息来源. After it writes the report, run:
+The daily agent already writes `report-YYYY-MM-DD.md` in the same format as `report-2026-09-25.md`, with these sections: 大盘概况 / focus-stock table + per-stock `### N. TICKER（名称）｜…` blocks with 主要原因 / 机构观点 / 市场情绪 / 流派辩论 (价值派/成长派/技术派/宏观派/反驳/**共识结论**) / 自选股速览 / 下周关注 / 信息来源.
+
+Homepage writing notes (please follow for new daily reports; the front end also falls back to one-liners + keyword filters if these fields are missing):
+- **市场概况** should focus on the holdings' industries, in short paragraphs (not one dense block): AI 算力 / 新云 (IREN、NBIS); 存储 / 半导体 (MU); 航天 / 太空 (SPCX、RKLB、RKLX、LUNL). Optional JSON: `market.industries` (each `{title, tickers, points[]}`) and a brief `market.backdrop` for index context only. Do not invent figures.
+- **下周关注** should mainly list whether these 7 names (and LUNR for LUNL) have upcoming earnings, and any verified large actions (unlocks, launches, official announcements). Past earnings and unrelated macro/other-company calendars do not belong here; FOMC may be one background line when it clearly affects the holdings. Optional JSON: `nextWeekHoldings` (`{date, tickers, kind, title, text, background?}`).
+
+After the agent writes the report, run:
 
 ```bash
 tools/daily_update.sh 2026-09-26 ../usstock/report-2026-09-26.md --push
